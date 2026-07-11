@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { chromium } = require('playwright');
+const { clickOnCanvasText } = require('./ocr-helper');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -44,33 +45,52 @@ async function placeBetWithPlaywright(betData) {
 
         console.log('Attempting login...');
         if (betData.platform === 'betika') {
-            // Betika login selectors
-            await page.click('a.top-session-button, button:has-text("Connexion")').catch(() => console.log('Login button not found instantly, continuing...'));
-            // await page.fill('input[type="number"], input[name="phone"]', process.env.PHONE_NUMBER);
-            // await page.fill('input[type="password"]', process.env.PASSWORD);
-            // await page.click('button:has-text("Se connecter"), button[type="submit"]');
+            // Betika login selectors (with OCR Fallback for Canvas/Image buttons)
+            let loginClicked = false;
+            try {
+                await page.click('a.top-session-button, button:has-text("Connexion")', { timeout: 3000 });
+                loginClicked = true;
+            } catch (e) {
+                console.log('Standard login selector failed, attempting OCR Fallback...');
+                loginClicked = await clickOnCanvasText(page, 'Connexion');
+            }
+
+            if (loginClicked) {
+                // await page.fill('input[type="number"], input[name="phone"]', process.env.PHONE_NUMBER);
+                // await page.fill('input[type="password"]', process.env.PASSWORD);
+                // await page.click('button:has-text("Se connecter"), button[type="submit"]');
+            }
         } else {
             // Betpawa login selectors
-            await page.click('a.link:has-text("Login"), a:has-text("Connexion")').catch(() => console.log('Login button not found instantly, continuing...'));
-            // await page.fill('input[type="tel"]', process.env.PHONE_NUMBER);
-            // await page.fill('input[type="password"]', process.env.PASSWORD);
-            // await page.click('button:has-text("Log In"), button:has-text("Connexion")');
+            let loginClicked = false;
+            try {
+                await page.click('a.link:has-text("Login"), a:has-text("Connexion")', { timeout: 3000 });
+                loginClicked = true;
+            } catch (e) {
+                console.log('Standard login selector failed, attempting OCR Fallback...');
+                loginClicked = await clickOnCanvasText(page, 'Login');
+            }
+
+            if (loginClicked) {
+                // await page.fill('input[type="tel"]', process.env.PHONE_NUMBER);
+                // await page.fill('input[type="password"]', process.env.PASSWORD);
+                // await page.click('button:has-text("Log In"), button:has-text("Connexion")');
+            }
         }
 
         console.log(`Searching for match ID: ${betData.matchId} and placing bet on odds: ${betData.odds}`);
-        // Typically involves searching by team name in the search bar and clicking the match
-        // await page.click(`text=${betData.homeTeam}`);
-        // Click the specific odd button (requires custom data-test-id or CSS based on exact structure)
+        // If odds are in a canvas grid:
+        // await clickOnCanvasText(page, String(betData.odds));
 
         console.log(`Entering stake: ${betData.stake} and confirming bet...`);
         if (betData.platform === 'betika') {
-            // await page.click('div.betslip-toggle, text="Panier"');
+            // await clickOnCanvasText(page, 'Panier');
             // await page.fill('input.betslip-stake, input[placeholder="Mise"]', String(betData.stake));
-            // await page.click('button:has-text("Placer le pari")');
+            // await clickOnCanvasText(page, 'Placer');
         } else {
-            // await page.click('text="LOAD BETSLIP", text="Betslip"');
+            // await clickOnCanvasText(page, 'BETSLIP');
             // await page.fill('input[name="stake"]', String(betData.stake));
-            // await page.click('button:has-text("Place bet"), button:has-text("Placer le pari")');
+            // await clickOnCanvasText(page, 'Place bet');
         }
 
         // Simulate network delay
