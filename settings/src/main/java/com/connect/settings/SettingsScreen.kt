@@ -2,6 +2,8 @@ package com.connect.settings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
@@ -11,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -26,45 +29,70 @@ fun SettingsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(16.dp)
+            .background(Color(0xFFF2F2F7)) // iOS Settings typical Light Background (Adjusted by theme in reality, hardcoded here for iOS look)
+            .padding(top = 48.dp)
     ) {
         Text(
-            "Paramètres",
-            color = MaterialTheme.colorScheme.onBackground,
-            fontSize = 28.sp,
+            "Réglages",
+            color = Color.Black,
+            fontSize = 34.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 24.dp)
+            modifier = Modifier.padding(horizontal = 20.dp).padding(bottom = 16.dp)
         )
 
-        Row(
+        // iOS Style Grouped List
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(Color.White)
         ) {
-            Column {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
-                    "Thème Sombre",
-                    color = MaterialTheme.colorScheme.onBackground,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold
+                    "Mode Sombre",
+                    color = Color.Black,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Normal
                 )
-                Text(
-                    "Basculer entre le thème clair et sombre",
-                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
-                    fontSize = 14.sp
+                Switch(
+                    checked = isDarkTheme,
+                    onCheckedChange = { viewModel.toggleTheme(it) },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = Color(0xFF34C759), // Apple Green
+                        uncheckedThumbColor = Color.White,
+                        uncheckedTrackColor = Color(0xFFE5E5EA),
+                        uncheckedBorderColor = Color.Transparent
+                    )
                 )
             }
-            Switch(
-                checked = isDarkTheme,
-                onCheckedChange = { viewModel.toggleTheme(it) },
-                colors = SwitchDefaults.colors(
-                    checkedThumbColor = MaterialTheme.colorScheme.primary,
-                    checkedTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+            Divider(color = Color(0xFFE5E5EA), thickness = 0.5.dp, modifier = Modifier.padding(start = 16.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 18.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    "Bluetooth",
+                    color = Color.Black,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Normal
                 )
-            )
+                Text(
+                    "Activé >",
+                    color = Color.Gray,
+                    fontSize = 17.sp
+                )
+            }
         }
     }
 }

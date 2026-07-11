@@ -11,30 +11,36 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 
-val DarkColorScheme = darkColorScheme(
-    primary = Color(0xFF64FFDA), // Teal Premium
-    secondary = Color(0xFFB388FF),
-    tertiary = Color(0xFFFF4081),
-    background = Color(0xFF0F172A), // Dark slate
-    surface = Color(0xFF1E293B),
-    onPrimary = Color.Black,
-    onSecondary = Color.Black,
-    onTertiary = Color.White,
-    onBackground = Color(0xFFE2E8F0),
-    onSurface = Color(0xFFE2E8F0)
-)
+val AppleBlue = Color(0xFF007AFF)
+val AppleGreen = Color(0xFF34C759)
+val AppleRed = Color(0xFFFF3B30)
 
-val LightColorScheme = lightColorScheme(
-    primary = Color(0xFF00BFA5),
-    secondary = Color(0xFF651FFF),
-    tertiary = Color(0xFFF50057),
-    background = Color(0xFFF8FAFC),
-    surface = Color(0xFFFFFFFF),
+val DarkColorScheme = darkColorScheme(
+    primary = AppleBlue,
+    secondary = AppleGreen,
+    tertiary = AppleRed,
+    background = Color(0xFF000000), // Pure Black for OLED
+    surface = Color(0xFF1C1C1E), // Elevated surface
+    surfaceVariant = Color(0xFF2C2C2E), // Secondary elevated
     onPrimary = Color.White,
     onSecondary = Color.White,
     onTertiary = Color.White,
-    onBackground = Color(0xFF1E293B),
-    onSurface = Color(0xFF1E293B)
+    onBackground = Color.White,
+    onSurface = Color.White
+)
+
+val LightColorScheme = lightColorScheme(
+    primary = AppleBlue,
+    secondary = AppleGreen,
+    tertiary = AppleRed,
+    background = Color(0xFFF2F2F7), // Light gray background
+    surface = Color(0xFFFFFFFF), // Pure white surface
+    surfaceVariant = Color(0xFFE5E5EA),
+    onPrimary = Color.White,
+    onSecondary = Color.White,
+    onTertiary = Color.White,
+    onBackground = Color.Black,
+    onSurface = Color.Black
 )
 
 @Composable

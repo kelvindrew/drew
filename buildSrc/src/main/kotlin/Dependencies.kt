@@ -12,6 +12,7 @@ object Versions {
 }
 
 object Libs {
+    const val composeRuntime = "androidx.compose.runtime:runtime:${Versions.compose}"
     const val composeUi = "androidx.compose.ui:ui:${Versions.compose}"
     const val composeMaterial3 = "androidx.compose.material3:material3:1.1.2"
     const val hiltAndroid = "com.google.dagger:hilt-android:${Versions.hilt}"

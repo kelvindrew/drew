@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp") version "1.9.0-1.0.12"
     id("com.google.dagger.hilt.android")
 }
 
@@ -16,23 +16,29 @@ android {
         versionName = "1.0"
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "1.8"
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        kotlinCompilerExtensionVersion = "1.5.1"
     }
 }
 
 dependencies {
+    implementation(Libs.composeRuntime)
+    implementation(Libs.composeUi)
     implementation(project(":ui"))
     implementation(Libs.activityCompose)
+    implementation(Libs.composeMaterial3)
     implementation(Libs.navigationCompose)
     implementation(Libs.hiltNavigationCompose)
     implementation(project(":ai"))
@@ -44,6 +50,6 @@ dependencies {
     implementation(project(":sport"))
     implementation(Libs.coroutinesCore)
     implementation(Libs.hiltAndroid)
-    kapt(Libs.hiltCompiler)
+    ksp(Libs.hiltCompiler)
     implementation(project(":core"))
 }

@@ -7,6 +7,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.background
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -48,72 +52,83 @@ fun ConnectPremiumApp() {
     Scaffold(
         bottomBar = {
             NavigationBar(
-                containerColor = MaterialTheme.colorScheme.surface,
-                contentColor = MaterialTheme.colorScheme.onSurface
+                containerColor = Color(0xFF1C1C1E).copy(alpha = 0.9f), // Translucent iOS style
+                contentColor = Color.White
             ) {
                 NavigationBarItem(
-                    icon = { Text("🏠") },
-                    label = { Text("Accueil") },
+                    icon = { Text("􀎟", style = MaterialTheme.typography.bodyLarge) }, // SF Symbol equivalent mock
+                    label = { Text("Résumé", style = MaterialTheme.typography.bodyMedium.copy(fontSize = 10.sp)) },
                     selected = currentRoute == "dashboard",
                     onClick = { navController.navigate("dashboard") },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        selectedIconColor = Color(0xFF007AFF), // Apple Blue
+                        selectedTextColor = Color(0xFF007AFF),
                         unselectedIconColor = Color.Gray,
-                        indicatorColor = MaterialTheme.colorScheme.background
+                        unselectedTextColor = Color.Gray,
+                        indicatorColor = Color.Transparent // Hide pill indicator for iOS look
                     )
                 )
                 NavigationBarItem(
-                    icon = { Text("⌚") },
-                    label = { Text("Boutique") },
+                    icon = { Text("􀺽", style = MaterialTheme.typography.bodyLarge) },
+                    label = { Text("Cadrans", style = MaterialTheme.typography.bodyMedium.copy(fontSize = 10.sp)) },
                     selected = currentRoute == "store",
                     onClick = { navController.navigate("store") },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        selectedIconColor = Color(0xFF007AFF),
+                        selectedTextColor = Color(0xFF007AFF),
                         unselectedIconColor = Color.Gray,
-                        indicatorColor = MaterialTheme.colorScheme.background
+                        unselectedTextColor = Color.Gray,
+                        indicatorColor = Color.Transparent
                     )
                 )
                 NavigationBarItem(
-                    icon = { Text("📡") },
-                    label = { Text("Radar") },
+                    icon = { Text("􀤆", style = MaterialTheme.typography.bodyLarge) },
+                    label = { Text("Jumelage", style = MaterialTheme.typography.bodyMedium.copy(fontSize = 10.sp)) },
                     selected = currentRoute == "scanner",
                     onClick = { navController.navigate("scanner") },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        selectedIconColor = Color(0xFF007AFF),
+                        selectedTextColor = Color(0xFF007AFF),
                         unselectedIconColor = Color.Gray,
-                        indicatorColor = MaterialTheme.colorScheme.background
+                        unselectedTextColor = Color.Gray,
+                        indicatorColor = Color.Transparent
                     )
                 )
                 NavigationBarItem(
-                    icon = { Text("⚙️") },
-                    label = { Text("Réglages") },
+                    icon = { Text("􀍟", style = MaterialTheme.typography.bodyLarge) },
+                    label = { Text("Réglages", style = MaterialTheme.typography.bodyMedium.copy(fontSize = 10.sp)) },
                     selected = currentRoute == "settings",
                     onClick = { navController.navigate("settings") },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        selectedIconColor = Color(0xFF007AFF),
+                        selectedTextColor = Color(0xFF007AFF),
                         unselectedIconColor = Color.Gray,
-                        indicatorColor = MaterialTheme.colorScheme.background
+                        unselectedTextColor = Color.Gray,
+                        indicatorColor = Color.Transparent
                     )
                 )
             }
         }
     ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = "dashboard",
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable("dashboard") {
-                DashboardScreen()
-            }
-            composable("store") {
-                WatchfaceStoreScreen()
-            }
-            composable("scanner") {
-                DeviceScannerScreen()
-            }
-            composable("settings") {
-                SettingsScreen()
+        // Use a black background for the NavHost to prevent white flashing on iOS style dark mode
+        Box(modifier = Modifier.fillMaxSize().background(Color.Black)) {
+            NavHost(
+                navController = navController,
+                startDestination = "dashboard",
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                composable("dashboard") {
+                    DashboardScreen()
+                }
+                composable("store") {
+                    WatchfaceStoreScreen()
+                }
+                composable("scanner") {
+                    DeviceScannerScreen()
+                }
+                composable("settings") {
+                    SettingsScreen()
+                }
             }
         }
     }
