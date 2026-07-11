@@ -1,0 +1,22 @@
+object Versions {
+    const val compose = "1.5.1"
+    const val hilt = "2.48"
+    const val room = "2.5.2"
+    const val coroutines = "1.7.3"
+    const val coil = "2.4.0"
+    const val healthConnect = "1.0.0-alpha11"
+}
+
+object Libs {
+    const val composeUi = "androidx.compose.ui:ui:${Versions.compose}"
+    const val composeMaterial3 = "androidx.compose.material3:material3:1.1.2"
+    const val hiltAndroid = "com.google.dagger:hilt-android:${Versions.hilt}"
+    const val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.hilt}"
+    const val coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
+    const val roomRuntime = "androidx.room:room-runtime:${Versions.room}"
+    const val coilCompose = "io.coil-kt:coil-compose:${Versions.coil}"
+    const val gemini = "com.google.ai.client.generativeai:generativeai:0.1.2"
+    const val healthConnect = "androidx.health.connect:connect-client:${Versions.healthConnect}"
+    const val dataStore = "androidx.datastore:datastore-preferences:1.0.0"
+    const val retrofit = "com.squareup.retrofit2:retrofit:2.9.0"
+}
