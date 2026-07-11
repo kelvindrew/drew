@@ -3,28 +3,54 @@ using System;
 
 namespace SmartMediaTransferAIDesktop.Models
 {
+    public enum TransferState
+    {
+        Pending,
+        InProgress,
+        Paused,
+        Completed,
+        Error,
+        Verified
+    }
+
+    public enum TransferMode
+    {
+        Copy,
+        Move
+    }
+
     [Table("Transfers")]
     public class TransferRecord
     {
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
+        [PrimaryKey]
+        public string TransferId { get; set; } = Guid.NewGuid().ToString(); // Unique transfer ID
 
         [Indexed]
-        public string FileHash { get; set; } = string.Empty;
+        public string FileId { get; set; } = string.Empty; // Unique file ID
+
+        [Indexed]
+        public string FileHash { get; set; } = string.Empty; // SHA-256
 
         public string FileName { get; set; } = string.Empty;
         public string OriginalPath { get; set; } = string.Empty;
         public string DestinationPath { get; set; } = string.Empty;
+
         public long SizeBytes { get; set; }
+        public long BytesTransferred { get; set; } // For resuming
 
         [Indexed]
         public string DeviceId { get; set; } = string.Empty;
 
-        public DateTime TransferDate { get; set; }
+        public DateTime FileCreationDate { get; set; }
+        public DateTime AddedToQueueDate { get; set; } = DateTime.UtcNow;
+        public DateTime? TransferCompletionDate { get; set; }
+
         public string Category { get; set; } = string.Empty;
 
-        // e.g., "Completed", "Interrupted", "Failed"
-        public string Status { get; set; } = string.Empty;
+        public int Priority { get; set; } = 0; // Higher number = higher priority
+
+        public TransferState State { get; set; } = TransferState.Pending;
+        public TransferMode Mode { get; set; } = TransferMode.Copy;
     }
 
     [Table("TrustedDevices")]

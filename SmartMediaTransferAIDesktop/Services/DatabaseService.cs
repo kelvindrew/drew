@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using SmartMediaTransferAIDesktop.Models;
+using System.Collections.Generic;
 
 namespace SmartMediaTransferAIDesktop.Services
 {
@@ -36,7 +37,7 @@ namespace SmartMediaTransferAIDesktop.Services
         {
             await InitAsync();
             var record = await _db!.Table<TransferRecord>()
-                                   .Where(r => r.FileHash == fileHash && r.Status == "Completed")
+                                   .Where(r => r.FileHash == fileHash && r.State == TransferState.Verified)
                                    .FirstOrDefaultAsync();
             return record != null;
         }
@@ -44,7 +45,17 @@ namespace SmartMediaTransferAIDesktop.Services
         public async Task RecordTransferAsync(TransferRecord record)
         {
             await InitAsync();
-            await _db!.InsertAsync(record);
+            await _db!.InsertOrReplaceAsync(record);
+        }
+
+        public async Task<List<TransferRecord>> GetPendingTransfersForDeviceAsync(string deviceId)
+        {
+            await InitAsync();
+            return await _db!.Table<TransferRecord>()
+                             .Where(r => r.DeviceId == deviceId && r.State != TransferState.Verified)
+                             .OrderByDescending(r => r.Priority)
+                             .ThenBy(r => r.AddedToQueueDate)
+                             .ToListAsync();
         }
     }
 }
