@@ -5,6 +5,8 @@ object Versions {
     const val coroutines = "1.7.3"
     const val coil = "2.4.0"
     const val healthConnect = "1.0.0-alpha11"
+    const val activityCompose = "1.7.2"
+    const val navigationCompose = "2.7.2"
 }
 
 object Libs {
@@ -19,4 +21,6 @@ object Libs {
     const val healthConnect = "androidx.health.connect:connect-client:${Versions.healthConnect}"
     const val dataStore = "androidx.datastore:datastore-preferences:1.0.0"
     const val retrofit = "com.squareup.retrofit2:retrofit:2.9.0"
+    const val activityCompose = "androidx.activity:activity-compose:${Versions.activityCompose}"
+    const val navigationCompose = "androidx.navigation:navigation-compose:${Versions.navigationCompose}"
 }

@@ -30,6 +30,7 @@ android {
 dependencies {
     implementation(Libs.composeUi)
     implementation(Libs.composeMaterial3)
+    implementation(project(":ai"))
     implementation(Libs.coroutinesCore)
     implementation(Libs.hiltAndroid)
     implementation(project(":core"))

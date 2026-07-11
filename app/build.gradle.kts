@@ -31,6 +31,8 @@ android {
 
 dependencies {
     implementation(project(":ui"))
+    implementation(Libs.activityCompose)
+    implementation(Libs.navigationCompose)
     implementation(project(":ai"))
     implementation(project(":watch"))
     implementation(project(":health"))
