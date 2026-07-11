@@ -20,6 +20,15 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val localProperties = java.util.Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            localProperties.load(java.io.FileInputStream(localPropertiesFile))
+        }
+
+        buildConfigField("String", "API_FOOTBALL_KEY", "\"${localProperties.getProperty("API_FOOTBALL_KEY", "")}\"")
+        buildConfigField("String", "THE_ODDS_KEY", "\"${localProperties.getProperty("THE_ODDS_KEY", "")}\"")
     }
 
     buildTypes {

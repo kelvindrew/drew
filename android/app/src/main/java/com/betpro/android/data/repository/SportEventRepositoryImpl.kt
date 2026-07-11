@@ -14,14 +14,15 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlin.math.abs
 
+import com.betpro.android.BuildConfig
+
 class SportEventRepositoryImpl @Inject constructor(
     private val footballApi: ApiFootballService,
     private val oddsApi: TheOddsApiService
 ) : SportEventRepository {
 
-    // Hardcoded for now. In a real app, these should be securely provided (e.g. BuildConfig)
-    private val footballApiKey = "MOCK_FOOTBALL_API_KEY"
-    private val oddsApiKey = "MOCK_ODDS_API_KEY"
+    private val footballApiKey = BuildConfig.API_FOOTBALL_KEY
+    private val oddsApiKey = BuildConfig.THE_ODDS_KEY
 
     override suspend fun getUpcomingEvents(): List<SportEvent> = withContext(Dispatchers.IO) {
         try {
