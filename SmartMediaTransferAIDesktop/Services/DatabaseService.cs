@@ -32,10 +32,37 @@ namespace SmartMediaTransferAIDesktop.Services
             await _db.CreateTableAsync<TransferRecord>();
             await _db.CreateTableAsync<TrustedDevice>();
 
-            // New tables for intelligent storage
             await _db.CreateTableAsync<StorageDrive>();
             await _db.CreateTableAsync<ArchivingTask>();
             await _db.CreateTableAsync<ArchivingRule>();
+            await _db.CreateTableAsync<CategoryModel>();
+            await _db.CreateTableAsync<UserDecision>();
+
+            await SeedDefaultCategoriesAsync();
+        }
+
+        private async Task SeedDefaultCategoriesAsync()
+        {
+            var count = await _db!.Table<CategoryModel>().CountAsync();
+            if (count == 0)
+            {
+                var defaults = new List<CategoryModel>
+                {
+                    new CategoryModel { Name = "Films", IsSystemDefault = true },
+                    new CategoryModel { Name = "Séries", IsSystemDefault = true },
+                    new CategoryModel { Name = "Animés", IsSystemDefault = true },
+                    new CategoryModel { Name = "Jeux PC", IsSystemDefault = true },
+                    new CategoryModel { Name = "Jeux PlayStation", IsSystemDefault = true },
+                    new CategoryModel { Name = "Photos", IsSystemDefault = true },
+                    new CategoryModel { Name = "Vidéos", IsSystemDefault = true },
+                    new CategoryModel { Name = "Musiques", IsSystemDefault = true },
+                    new CategoryModel { Name = "Documents", IsSystemDefault = true },
+                    new CategoryModel { Name = "Archives", IsSystemDefault = true },
+                    new CategoryModel { Name = "Logiciels", IsSystemDefault = true },
+                    new CategoryModel { Name = "Projets", IsSystemDefault = true }
+                };
+                await _db.InsertAllAsync(defaults);
+            }
         }
 
         public async Task<bool> IsFileAlreadyTransferredAsync(string fileHash)
@@ -62,8 +89,6 @@ namespace SmartMediaTransferAIDesktop.Services
                              .ThenBy(r => r.AddedToQueueDate)
                              .ToListAsync();
         }
-
-        // --- Storage Management Repositories ---
 
         public async Task UpdateStorageDriveAsync(StorageDrive drive)
         {
@@ -96,7 +121,34 @@ namespace SmartMediaTransferAIDesktop.Services
         public async Task<List<ArchivingRule>> GetActiveRulesAsync()
         {
             await InitAsync();
-            return await _db!.Table<ArchivingRule>().Where(r => r.IsEnabled).ToListAsync();
+            return await _db!.Table<ArchivingRule>()
+                             .Where(r => r.IsEnabled)
+                             .OrderByDescending(r => r.Priority)
+                             .ToListAsync();
+        }
+
+        public async Task SaveArchivingRuleAsync(ArchivingRule rule)
+        {
+            await InitAsync();
+            await _db!.InsertOrReplaceAsync(rule);
+        }
+
+        public async Task SaveUserDecisionAsync(UserDecision decision)
+        {
+            await InitAsync();
+            await _db!.InsertAsync(decision);
+        }
+
+        public async Task<List<UserDecision>> GetUserDecisionsAsync()
+        {
+            await InitAsync();
+            return await _db!.Table<UserDecision>().OrderByDescending(d => d.DecisionDate).ToListAsync();
+        }
+
+        public async Task<List<CategoryModel>> GetCategoriesAsync()
+        {
+            await InitAsync();
+            return await _db!.Table<CategoryModel>().ToListAsync();
         }
     }
 }

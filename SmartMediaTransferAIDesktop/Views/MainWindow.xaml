@@ -23,6 +23,7 @@
                 <ui:NavigationViewItem Content="Dashboard" Icon="{ui:SymbolIcon Symbol=Home24}" TargetPageType="{x:Type local:DashboardPage}" />
                 <ui:NavigationViewItem Content="Transfers" Icon="{ui:SymbolIcon Symbol=ArrowSwap24}" TargetPageType="{x:Type local:TransferPage}" />
                 <ui:NavigationViewItem Content="Storage" Icon="{ui:SymbolIcon Symbol=Drive24}" TargetPageType="{x:Type local:StoragePage}" />
+                <ui:NavigationViewItem Content="Intelligence" Icon="{ui:SymbolIcon Symbol=BrainCircuit24}" TargetPageType="{x:Type local:IntelligencePage}" />
                 <ui:NavigationViewItem Content="Devices" Icon="{ui:SymbolIcon Symbol=Phone24}" />
             </ui:NavigationView.MenuItems>
 

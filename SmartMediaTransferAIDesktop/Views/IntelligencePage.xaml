@@ -1,0 +1,104 @@
+<Page x:Class="SmartMediaTransferAIDesktop.Views.IntelligencePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      mc:Ignorable="d"
+      d:DesignHeight="800" d:DesignWidth="1000"
+      Title="IntelligencePage"
+      Foreground="White">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="32">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,24">
+                <TextBlock Text="Intelligence &amp; Règles" FontSize="36" FontWeight="Bold" />
+                <TextBlock Text="L'IA apprend de vos habitudes pour automatiser vos rangements." FontSize="16" Foreground="#A0A0A0" Margin="0,8,0,0"/>
+            </StackPanel>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="24"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Rules List -->
+                <ui:Card Grid.Column="0" Padding="24" VerticalAlignment="Top">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,16">
+                            <TextBlock Text="Règles Actives (Priorité)" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            <ui:Button Content="Nouvelle Règle" Icon="{ui:SymbolIcon Symbol=Add24}" HorizontalAlignment="Right" Appearance="Primary" />
+                        </Grid>
+
+                        <ui:ListView>
+                            <ui:ListView.Items>
+                                <!-- Mock Rule 1 -->
+                                <ui:CardAction Margin="0,4" Padding="16">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="P1" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Garder Documents pro sur SSD" FontWeight="SemiBold"/>
+                                            <TextBlock Text="Si Catégorie = Documents -> Déplacer vers Local Disk (C:)" FontSize="12" Foreground="#A0A0A0"/>
+                                        </StackPanel>
+                                        <ui:ToggleSwitch Grid.Column="2" IsChecked="True" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </ui:CardAction>
+
+                                <!-- Mock Rule 2 -->
+                                <ui:CardAction Margin="0,4" Padding="16">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="P2" FontWeight="Bold" Foreground="{StaticResource PrimaryBrush}" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Films vers Disque Externe" FontWeight="SemiBold"/>
+                                            <TextBlock Text="Si Catégorie = Films -> Déplacer vers Samsung T7 (D:)" FontSize="12" Foreground="#A0A0A0"/>
+                                        </StackPanel>
+                                        <ui:ToggleSwitch Grid.Column="2" IsChecked="True" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </ui:CardAction>
+                            </ui:ListView.Items>
+                        </ui:ListView>
+                    </StackPanel>
+                </ui:Card>
+
+                <!-- Mode Confirmation Panel -->
+                <ui:Card Grid.Column="2" Padding="24" Background="#1E2028" BorderBrush="{StaticResource PrimaryBrush}" BorderThickness="1" VerticalAlignment="Top">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <ui:SymbolIcon Symbol="Sparkle24" Foreground="{StaticResource PrimaryBrush}" FontSize="24" Margin="0,0,8,0"/>
+                            <TextBlock Text="Action Requise" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource PrimaryBrush}"/>
+                        </StackPanel>
+
+                        <TextBlock Text="L'IA suggère un déplacement basé sur vos habitudes." TextWrapping="Wrap" Foreground="#A0A0A0" Margin="0,0,0,16"/>
+
+                        <TextBlock Text="Fichier détecté :" FontSize="12" Foreground="#A0A0A0"/>
+                        <TextBlock Text="D:\Downloads\Inception_1080p.mkv" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,0,0,12"/>
+
+                        <TextBlock Text="Nouvel emplacement :" FontSize="12" Foreground="#A0A0A0"/>
+                        <TextBlock Text="D:\Bibliothèque\Films\Inception" FontWeight="SemiBold" Foreground="{StaticResource SuccessBrush}" TextWrapping="Wrap" Margin="0,0,0,24"/>
+
+                        <Button Content="✅ Autoriser" Background="{StaticResource SuccessBrush}" Foreground="White" Margin="0,0,0,8" />
+                        <Button Content="❌ Refuser" Background="{StaticResource ErrorBrush}" Foreground="White" Margin="0,0,0,8"/>
+                        <ui:Button Content="✏ Modifier la règle" HorizontalAlignment="Stretch"/>
+                    </StackPanel>
+                </ui:Card>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</Page>

@@ -66,7 +66,6 @@ namespace SmartMediaTransferAIDesktop.Models
         public bool IsAuthorized { get; set; }
     }
 
-
     public enum DriveTypeEnum
     {
         Unknown,
@@ -118,6 +117,16 @@ namespace SmartMediaTransferAIDesktop.Models
         public DateTime? CompletionDate { get; set; }
     }
 
+    [Table("Categories")]
+    public class CategoryModel
+    {
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string DefaultPath { get; set; } = string.Empty;
+        public bool IsSystemDefault { get; set; } = false;
+    }
+
     [Table("ArchivingRules")]
     public class ArchivingRule
     {
@@ -126,15 +135,46 @@ namespace SmartMediaTransferAIDesktop.Models
 
         public string Name { get; set; } = string.Empty;
 
-        // e.g. "FileSize", "FileType", "DriveCapacity"
+        // e.g. "FileSize", "FileType", "DriveCapacity", "Category", "FileNameRegex", "TMDBMatch"
         public string ConditionType { get; set; } = string.Empty;
 
-        // e.g. ">5000000000", ".mp4", ">80"
         public string ConditionValue { get; set; } = string.Empty;
 
         public TransferMode ActionType { get; set; } = TransferMode.Move;
         public string TargetDriveId { get; set; } = string.Empty;
+        public string TargetDirectory { get; set; } = string.Empty; // e.g., "E:\Library\Movies"
+
+        public int Priority { get; set; } = 100;
+        public int CategoryId { get; set; } = 0;
 
         public bool IsEnabled { get; set; } = true;
+        public bool IsAIRecommended { get; set; } = false;
+    }
+
+    public enum DecisionType
+    {
+        Accept,
+        Reject,
+        Modify
+    }
+
+    [Table("UserDecisions")]
+    public class UserDecision
+    {
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
+
+        public string OriginalPath { get; set; } = string.Empty;
+        public string SuggestedDestination { get; set; } = string.Empty;
+        public string ActualDestination { get; set; } = string.Empty;
+
+        public string RuleTriggeredName { get; set; } = string.Empty;
+        public DecisionType Decision { get; set; }
+        public DateTime DecisionDate { get; set; } = DateTime.UtcNow;
+
+        // Features for the ML-like model
+        public string FileExtension { get; set; } = string.Empty;
+        public long SizeBytes { get; set; }
+        public string AnalyzedType { get; set; } = string.Empty; // e.g. "Movie", "TVShow"
     }
 }
