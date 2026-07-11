@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.betpro.android.domain.repository.SettingsRepository
 import com.betpro.android.domain.repository.SportEventRepository
 import com.betpro.android.domain.usecase.CheckStopLossUseCase
 import com.betpro.android.domain.usecase.FindDoubleBetOpportunitiesUseCase
@@ -11,6 +12,7 @@ import com.betpro.android.util.NotificationUtils
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
@@ -22,14 +24,16 @@ class AutomationWorker @AssistedInject constructor(
     @Assisted workerParams: WorkerParameters,
     private val sportEventRepository: SportEventRepository,
     private val findDoubleBetOpportunitiesUseCase: FindDoubleBetOpportunitiesUseCase,
-    private val checkStopLossUseCase: CheckStopLossUseCase
+    private val checkStopLossUseCase: CheckStopLossUseCase,
+    private val settingsRepository: SettingsRepository
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
         try {
-            // 1. Check Stop Loss (Mock balance for now)
-            val currentBalance = 1250.0
-            val stopLossThreshold = 100.0
+            // 1. Check Stop Loss via DataStore
+            val settings = settingsRepository.appSettingsFlow.first()
+            val currentBalance = settings.virtualBalance
+            val stopLossThreshold = settings.stopLossThreshold
 
             if (checkStopLossUseCase(currentBalance, stopLossThreshold)) {
                 NotificationUtils.showNotification(

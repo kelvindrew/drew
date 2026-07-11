@@ -16,9 +16,13 @@ import kotlin.math.abs
 
 import com.betpro.android.BuildConfig
 
+import com.betpro.android.domain.repository.SettingsRepository
+import kotlinx.coroutines.flow.first
+
 class SportEventRepositoryImpl @Inject constructor(
     private val footballApi: ApiFootballService,
-    private val oddsApi: TheOddsApiService
+    private val oddsApi: TheOddsApiService,
+    private val settingsRepository: SettingsRepository
 ) : SportEventRepository {
 
     private val footballApiKey = BuildConfig.API_FOOTBALL_KEY
@@ -26,6 +30,11 @@ class SportEventRepositoryImpl @Inject constructor(
 
     override suspend fun getUpcomingEvents(): List<SportEvent> = withContext(Dispatchers.IO) {
         try {
+            val isSimulation = settingsRepository.appSettingsFlow.first().isSimulationMode
+            if (isSimulation) {
+                return@withContext getIntelligentMockEvents()
+            }
+
             val todayDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
             val footballDeferred = async {
@@ -136,6 +145,37 @@ class SportEventRepositoryImpl @Inject constructor(
         return listOf(
             SportEvent("1", "Real Madrid", "Manchester City", System.currentTimeMillis() + 3600000, 2.65, 3.40, 2.50, 1.65, 1.80),
             SportEvent("2", "Arsenal", "Chelsea", System.currentTimeMillis() + 86400000, 1.85, 3.60, 4.20, 1.90, 2.10)
+        )
+    }
+
+    private fun getIntelligentMockEvents(): List<SportEvent> {
+        // Generates somewhat dynamic realistic data for testing
+        val teams = listOf("PSG", "Bayern", "Liverpool", "Juventus", "AC Milan", "Inter", "Ajax", "Porto")
+        val shuffledTeams = teams.shuffled()
+
+        return listOf(
+            SportEvent(
+                id = "mock_${System.currentTimeMillis()}_1",
+                homeTeam = shuffledTeams[0],
+                awayTeam = shuffledTeams[1],
+                startTime = System.currentTimeMillis() + 3600000,
+                odds1 = 1.5 + Math.random(),
+                oddsX = 3.0 + Math.random(),
+                odds2 = 4.0 + Math.random(),
+                oddsBttsYes = 1.5 + Math.random(),
+                oddsOver25 = 1.6 + Math.random()
+            ),
+            SportEvent(
+                id = "mock_${System.currentTimeMillis()}_2",
+                homeTeam = shuffledTeams[2],
+                awayTeam = shuffledTeams[3],
+                startTime = System.currentTimeMillis() + 7200000,
+                odds1 = 2.5 + Math.random(),
+                oddsX = 3.2 + Math.random(),
+                odds2 = 2.7 + Math.random(),
+                oddsBttsYes = 1.8 + Math.random(),
+                oddsOver25 = 1.9 + Math.random()
+            )
         )
     }
 }

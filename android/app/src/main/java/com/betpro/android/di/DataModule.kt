@@ -40,8 +40,17 @@ object DataModule {
     @Singleton
     fun provideSportEventRepository(
         footballService: ApiFootballService,
-        oddsService: TheOddsApiService
+        oddsService: TheOddsApiService,
+        settingsRepository: com.betpro.android.domain.repository.SettingsRepository
     ): SportEventRepository {
-        return SportEventRepositoryImpl(footballService, oddsService)
+        return SportEventRepositoryImpl(footballService, oddsService, settingsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSettingsRepository(
+        @dagger.hilt.android.qualifiers.ApplicationContext context: android.content.Context
+    ): com.betpro.android.domain.repository.SettingsRepository {
+        return com.betpro.android.data.local.SettingsRepositoryImpl(context)
     }
 }

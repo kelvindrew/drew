@@ -12,17 +12,22 @@ import androidx.compose.ui.unit.dp
 import com.betpro.android.domain.model.SportEvent
 import com.betpro.android.presentation.components.MatchCard
 
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.betpro.android.presentation.viewmodel.SettingsViewModel
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(settingsViewModel: SettingsViewModel = hiltViewModel()) {
     // Mock data for UI presentation
     val events = listOf(
         SportEvent("1", "Real Madrid", "Manchester City", System.currentTimeMillis(), 2.65, 3.40, 2.50, 1.65, 1.80),
         SportEvent("2", "Arsenal", "Chelsea", System.currentTimeMillis(), 1.85, 3.60, 4.20, 1.90, 2.10)
     )
 
+    val settings by settingsViewModel.settings.collectAsState()
+
     var selectedTabIndex by remember { mutableStateOf(0) }
-    val tabs = listOf("Upcoming", "Live", "Settings")
+    val tabs = listOf("Upcoming", "Live", "Stats", "Settings")
 
     var showBottomSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState()
@@ -34,7 +39,7 @@ fun MainScreen() {
                 title = { Text("BETPRO", fontWeight = FontWeight.Bold) },
                 actions = {
                     Text(
-                        text = "$ 1,250.00",
+                        text = "$ ${String.format("%.2f", settings.virtualBalance)}",
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(end = 16.dp)
@@ -90,6 +95,9 @@ fun MainScreen() {
                     }
                 }
                 2 -> {
+                    StatisticsScreen()
+                }
+                3 -> {
                     StrategySettingsScreen()
                 }
             }

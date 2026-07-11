@@ -10,12 +10,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.betpro.android.presentation.viewmodel.SettingsViewModel
+
 @Composable
-fun StrategySettingsScreen() {
-    var isSimulationMode by remember { mutableStateOf(true) }
-    var isAIEngineEnabled by remember { mutableStateOf(true) }
-    var baseStake by remember { mutableStateOf("10.0") }
-    var stopLoss by remember { mutableStateOf("100.0") }
+fun StrategySettingsScreen(
+    viewModel: SettingsViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+) {
+    val settings by viewModel.settings.collectAsState()
+
+    var baseStakeText by remember(settings.baseStake) { mutableStateOf(settings.baseStake.toString()) }
+    var stopLossText by remember(settings.stopLossThreshold) { mutableStateOf(settings.stopLossThreshold.toString()) }
 
     Column(
         modifier = Modifier
@@ -27,8 +32,11 @@ fun StrategySettingsScreen() {
         // Mode Card
         SettingsCard(title = "Mode de Fonctionnement") {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text(if (isSimulationMode) "Mode Simulation (Test)" else "Mode Réel (Argent Réel)")
-                Switch(checked = isSimulationMode, onCheckedChange = { isSimulationMode = it })
+                Text(if (settings.isSimulationMode) "Mode Simulation (Test)" else "Mode Réel (Argent Réel)")
+                Switch(
+                    checked = settings.isSimulationMode,
+                    onCheckedChange = { viewModel.updateSimulationMode(it) }
+                )
             }
         }
 
@@ -36,7 +44,10 @@ fun StrategySettingsScreen() {
         SettingsCard(title = "Moteur d'Intelligence Artificielle") {
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Text("Validation Gemini IA")
-                Switch(checked = isAIEngineEnabled, onCheckedChange = { isAIEngineEnabled = it })
+                Switch(
+                    checked = settings.isAIEngineEnabled,
+                    onCheckedChange = { viewModel.updateAIEngine(it) }
+                )
             }
             Text("Si activé, l'algorithme demande l'avis de l'IA avant de placer le pari.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
@@ -44,15 +55,21 @@ fun StrategySettingsScreen() {
         // Capital Management Card
         SettingsCard(title = "Gestion du Capital (Martingale)") {
             OutlinedTextField(
-                value = baseStake,
-                onValueChange = { baseStake = it },
+                value = baseStakeText,
+                onValueChange = {
+                    baseStakeText = it
+                    viewModel.updateBaseStake(it)
+                },
                 label = { Text("Mise de base ($)") },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
-                value = stopLoss,
-                onValueChange = { stopLoss = it },
+                value = stopLossText,
+                onValueChange = {
+                    stopLossText = it
+                    viewModel.updateStopLoss(it)
+                },
                 label = { Text("Stop-Loss (Arrêt si solde < $)") },
                 modifier = Modifier.fillMaxWidth()
             )
