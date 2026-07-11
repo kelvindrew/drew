@@ -32,6 +32,8 @@ dependencies {
     implementation(Libs.coroutinesCore)
     implementation(Libs.composeUi)
     implementation(Libs.composeMaterial3)
+    implementation(Libs.accompanistPermissions)
+    implementation(Libs.hiltNavigationCompose)
     implementation(Libs.hiltAndroid)
     kapt(Libs.hiltCompiler)
     implementation(project(":core"))

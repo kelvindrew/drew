@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 }
 
@@ -29,7 +30,11 @@ android {
 
 dependencies {
     implementation(Libs.dataStore)
+    implementation(Libs.composeUi)
+    implementation(Libs.composeMaterial3)
+    implementation(Libs.hiltNavigationCompose)
     implementation(Libs.coroutinesCore)
     implementation(Libs.hiltAndroid)
+    kapt(Libs.hiltCompiler)
     implementation(project(":core"))
 }

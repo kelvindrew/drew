@@ -1,5 +1,7 @@
 package com.connect.bluetooth.ui
 
+import android.Manifest
+import android.os.Build
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -17,19 +19,31 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.delay
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun DeviceScannerScreen() {
-    var isScanning by remember { mutableStateOf(false) }
-    var deviceFound by remember { mutableStateOf(false) }
+fun DeviceScannerScreen(
+    viewModel: ScannerViewModel = hiltViewModel()
+) {
+    val isScanning by viewModel.isScanning.collectAsState()
+    val deviceFound by viewModel.deviceFound.collectAsState()
 
-    LaunchedEffect(isScanning) {
-        if (isScanning) {
-            delay(3000) // Fake scan delay
-            deviceFound = true
-            isScanning = false
-        }
+    val bluetoothPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        rememberMultiplePermissionsState(
+            permissions = listOf(
+                Manifest.permission.BLUETOOTH_SCAN,
+                Manifest.permission.BLUETOOTH_CONNECT
+            )
+        )
+    } else {
+        rememberMultiplePermissionsState(
+            permissions = listOf(
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        )
     }
 
     Column(
@@ -47,11 +61,16 @@ fun DeviceScannerScreen() {
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            if (isScanning) "Recherche en cours..." else if (deviceFound) "Montre détectée !" else "Appuyez pour chercher",
-            color = Color.Gray,
-            fontSize = 16.sp
-        )
+
+        if (!bluetoothPermissions.allPermissionsGranted) {
+            Text("Permissions Bluetooth requises", color = Color.Red, fontSize = 16.sp)
+        } else {
+            Text(
+                if (isScanning) "Recherche en cours..." else if (deviceFound) "Montre détectée !" else "Appuyez pour chercher",
+                color = Color.Gray,
+                fontSize = 16.sp
+            )
+        }
 
         Spacer(modifier = Modifier.height(48.dp))
 
@@ -75,7 +94,6 @@ fun DeviceScannerScreen() {
             }
 
             if (deviceFound) {
-                // Fake Device Card popping up
                 Box(modifier = Modifier.offset(y = 100.dp)) {
                     Column(
                         modifier = Modifier
@@ -94,8 +112,11 @@ fun DeviceScannerScreen() {
 
         Button(
             onClick = {
-                isScanning = true
-                deviceFound = false
+                if (bluetoothPermissions.allPermissionsGranted) {
+                    viewModel.startScan()
+                } else {
+                    bluetoothPermissions.launchMultiplePermissionRequest()
+                }
             },
             enabled = !isScanning,
             colors = ButtonDefaults.buttonColors(
@@ -104,21 +125,27 @@ fun DeviceScannerScreen() {
             ),
             modifier = Modifier.fillMaxWidth(0.8f).height(50.dp)
         ) {
-            Text(if (deviceFound) "Relancer la recherche" else "Rechercher", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Text(
+                if (!bluetoothPermissions.allPermissionsGranted) "Autoriser Bluetooth"
+                else if (deviceFound) "Relancer la recherche"
+                else "Rechercher",
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp
+            )
         }
     }
 }
 
 @Composable
 fun RadarAnimation() {
-    val infiniteTransition = rememberInfiniteTransition()
+    val infiniteTransition = rememberInfiniteTransition(label = "")
     val radius by infiniteTransition.animateFloat(
         initialValue = 0f,
         targetValue = 150f,
         animationSpec = infiniteRepeatable(
             animation = tween(2000, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
-        )
+        ), label = ""
     )
     val alpha by infiniteTransition.animateFloat(
         initialValue = 1f,
@@ -126,7 +153,7 @@ fun RadarAnimation() {
         animationSpec = infiniteRepeatable(
             animation = tween(2000, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
-        )
+        ), label = ""
     )
 
     Canvas(modifier = Modifier.fillMaxSize()) {

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,21 +14,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.connect.ai.SmartCoachAI
-import kotlinx.coroutines.flow.collectLatest
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun DashboardScreen(aiCoach: SmartCoachAI? = null) {
-    var aiRecommendation by remember { mutableStateOf("Analyse de vos données en cours...") }
-
-    LaunchedEffect(Unit) {
-        if (aiCoach != null) {
-            val fakeHealthData = "BPM: 72, Pas: 8500, Sommeil: 7h30, Batterie: 85%"
-            aiCoach.generateRecommendations(fakeHealthData).collectLatest { recommendation ->
-                aiRecommendation = recommendation
-            }
-        }
-    }
+fun DashboardScreen(
+    viewModel: DashboardViewModel = hiltViewModel()
+) {
+    val aiRecommendation by viewModel.aiRecommendation.collectAsState()
 
     Column(
         modifier = Modifier

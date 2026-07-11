@@ -8,13 +8,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.connect.ai.SmartCoachAI
 import com.connect.bluetooth.ui.DeviceScannerScreen
+import com.connect.settings.SettingsScreen
+import com.connect.settings.SettingsDataStore
 import com.connect.ui.DashboardScreen
 import com.connect.ui.theme.ConnectPremiumTheme
 import com.connect.watch.WatchfaceStoreScreen
@@ -25,20 +25,22 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
     @Inject
-    lateinit var smartCoachAI: SmartCoachAI
+    lateinit var settingsDataStore: SettingsDataStore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ConnectPremiumTheme {
-                ConnectPremiumApp(smartCoachAI)
+            val isDarkTheme by settingsDataStore.isDarkThemeFlow.collectAsState(initial = true)
+
+            ConnectPremiumTheme(darkTheme = isDarkTheme) {
+                ConnectPremiumApp()
             }
         }
     }
 }
 
 @Composable
-fun ConnectPremiumApp(aiCoach: SmartCoachAI) {
+fun ConnectPremiumApp() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -46,8 +48,8 @@ fun ConnectPremiumApp(aiCoach: SmartCoachAI) {
     Scaffold(
         bottomBar = {
             NavigationBar(
-                containerColor = Color(0xFF1E293B),
-                contentColor = Color.White
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface
             ) {
                 NavigationBarItem(
                     icon = { Text("🏠") },
@@ -55,9 +57,9 @@ fun ConnectPremiumApp(aiCoach: SmartCoachAI) {
                     selected = currentRoute == "dashboard",
                     onClick = { navController.navigate("dashboard") },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color(0xFF64FFDA),
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
                         unselectedIconColor = Color.Gray,
-                        indicatorColor = Color(0xFF0F172A)
+                        indicatorColor = MaterialTheme.colorScheme.background
                     )
                 )
                 NavigationBarItem(
@@ -66,9 +68,9 @@ fun ConnectPremiumApp(aiCoach: SmartCoachAI) {
                     selected = currentRoute == "store",
                     onClick = { navController.navigate("store") },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color(0xFF64FFDA),
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
                         unselectedIconColor = Color.Gray,
-                        indicatorColor = Color(0xFF0F172A)
+                        indicatorColor = MaterialTheme.colorScheme.background
                     )
                 )
                 NavigationBarItem(
@@ -77,9 +79,20 @@ fun ConnectPremiumApp(aiCoach: SmartCoachAI) {
                     selected = currentRoute == "scanner",
                     onClick = { navController.navigate("scanner") },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color(0xFF64FFDA),
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
                         unselectedIconColor = Color.Gray,
-                        indicatorColor = Color(0xFF0F172A)
+                        indicatorColor = MaterialTheme.colorScheme.background
+                    )
+                )
+                NavigationBarItem(
+                    icon = { Text("⚙️") },
+                    label = { Text("Réglages") },
+                    selected = currentRoute == "settings",
+                    onClick = { navController.navigate("settings") },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        unselectedIconColor = Color.Gray,
+                        indicatorColor = MaterialTheme.colorScheme.background
                     )
                 )
             }
@@ -91,13 +104,16 @@ fun ConnectPremiumApp(aiCoach: SmartCoachAI) {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable("dashboard") {
-                DashboardScreen(aiCoach = aiCoach)
+                DashboardScreen()
             }
             composable("store") {
                 WatchfaceStoreScreen()
             }
             composable("scanner") {
                 DeviceScannerScreen()
+            }
+            composable("settings") {
+                SettingsScreen()
             }
         }
     }

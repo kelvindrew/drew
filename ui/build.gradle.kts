@@ -34,6 +34,7 @@ dependencies {
     implementation(project(":ai"))
     implementation(Libs.coroutinesCore)
     implementation(Libs.hiltAndroid)
+    implementation(Libs.hiltNavigationCompose)
     kapt(Libs.hiltCompiler)
     implementation(project(":core"))
 }
