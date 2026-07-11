@@ -31,6 +31,11 @@ namespace SmartMediaTransferAIDesktop.Services
             _db = new SQLiteAsyncConnection(databasePath);
             await _db.CreateTableAsync<TransferRecord>();
             await _db.CreateTableAsync<TrustedDevice>();
+
+            // New tables for intelligent storage
+            await _db.CreateTableAsync<StorageDrive>();
+            await _db.CreateTableAsync<ArchivingTask>();
+            await _db.CreateTableAsync<ArchivingRule>();
         }
 
         public async Task<bool> IsFileAlreadyTransferredAsync(string fileHash)
@@ -56,6 +61,42 @@ namespace SmartMediaTransferAIDesktop.Services
                              .OrderByDescending(r => r.Priority)
                              .ThenBy(r => r.AddedToQueueDate)
                              .ToListAsync();
+        }
+
+        // --- Storage Management Repositories ---
+
+        public async Task UpdateStorageDriveAsync(StorageDrive drive)
+        {
+            await InitAsync();
+            await _db!.InsertOrReplaceAsync(drive);
+        }
+
+        public async Task<List<StorageDrive>> GetConnectedDrivesAsync()
+        {
+            await InitAsync();
+            return await _db!.Table<StorageDrive>().Where(d => d.IsConnected).ToListAsync();
+        }
+
+        public async Task<List<ArchivingTask>> GetPendingArchivingTasksAsync()
+        {
+            await InitAsync();
+            return await _db!.Table<ArchivingTask>()
+                             .Where(t => t.State != TransferState.Verified)
+                             .OrderByDescending(t => t.Priority)
+                             .ThenBy(t => t.AddedToQueueDate)
+                             .ToListAsync();
+        }
+
+        public async Task RecordArchivingTaskAsync(ArchivingTask task)
+        {
+            await InitAsync();
+            await _db!.InsertOrReplaceAsync(task);
+        }
+
+        public async Task<List<ArchivingRule>> GetActiveRulesAsync()
+        {
+            await InitAsync();
+            return await _db!.Table<ArchivingRule>().Where(r => r.IsEnabled).ToListAsync();
         }
     }
 }

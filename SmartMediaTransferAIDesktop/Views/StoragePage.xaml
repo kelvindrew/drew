@@ -1,0 +1,102 @@
+<Page x:Class="SmartMediaTransferAIDesktop.Views.StoragePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      mc:Ignorable="d"
+      d:DesignHeight="800" d:DesignWidth="1000"
+      Title="StoragePage"
+      Foreground="White">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="32">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,24">
+                <TextBlock Text="Smart Management" FontSize="18" Foreground="#A0A0A0" />
+                <TextBlock Text="Storage &amp; Disks" FontSize="36" FontWeight="Bold" />
+            </StackPanel>
+
+            <!-- Disks Grid -->
+            <Grid Grid.Row="1" Margin="0,0,0,32">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="24" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Disk 1 (Example SSD) -->
+                <ui:Card Grid.Column="0" Padding="24">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <ui:SymbolIcon Symbol="DriveSolid24" FontSize="48" Foreground="{StaticResource PrimaryBrush}" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="Local Disk (C:)" FontSize="20" FontWeight="SemiBold" />
+                            <TextBlock Text="Internal SSD • NTFS" FontSize="14" Foreground="#A0A0A0" Margin="0,0,0,8" />
+                            <ProgressBar Value="85" Height="6" Margin="0,8,0,8" Foreground="{StaticResource WarningBrush}" />
+                            <Grid>
+                                <TextBlock Text="850 GB used" FontSize="12" HorizontalAlignment="Left" Foreground="#A0A0A0"/>
+                                <TextBlock Text="150 GB free" FontSize="12" HorizontalAlignment="Right" Foreground="#A0A0A0"/>
+                            </Grid>
+                            <TextBlock Text="SMART: Healthy • 38°C" FontSize="12" Foreground="{StaticResource SuccessBrush}" Margin="0,8,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </ui:Card>
+
+                <!-- Disk 2 (Example External) -->
+                <ui:Card Grid.Column="2" Padding="24">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <ui:SymbolIcon Symbol="UsbPort24" FontSize="48" Foreground="{StaticResource SecondaryBrush}" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="Samsung T7 (D:)" FontSize="20" FontWeight="SemiBold" />
+                            <TextBlock Text="External SSD • exFAT" FontSize="14" Foreground="#A0A0A0" Margin="0,0,0,8" />
+                            <ProgressBar Value="25" Height="6" Margin="0,8,0,8" Foreground="{StaticResource SecondaryBrush}" />
+                            <Grid>
+                                <TextBlock Text="500 GB used" FontSize="12" HorizontalAlignment="Left" Foreground="#A0A0A0"/>
+                                <TextBlock Text="1.5 TB free" FontSize="12" HorizontalAlignment="Right" Foreground="#A0A0A0"/>
+                            </Grid>
+                            <TextBlock Text="Active • Auto-Archiving ON" FontSize="12" Foreground="{StaticResource SecondaryBrush}" Margin="0,8,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </ui:Card>
+            </Grid>
+
+            <!-- Archiving Queue -->
+            <ui:Card Grid.Row="2" Padding="24">
+                <StackPanel>
+                    <TextBlock Text="Archiving Queue (PC → External)" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,16"/>
+                    <ui:ListView>
+                        <ui:ListView.Items>
+                            <!-- Mock Data -->
+                            <Grid Margin="0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Vacation_Video_4K.mp4" FontWeight="SemiBold"/>
+                                    <TextBlock Text="Moving to Samsung T7 (D:)" FontSize="12" Foreground="#A0A0A0"/>
+                                    <ProgressBar Value="45" Height="4" Margin="0,4,16,0" Foreground="{StaticResource SuccessBrush}"/>
+                                </StackPanel>
+                                <TextBlock Grid.Column="1" Text="45% • 120 MB/s" VerticalAlignment="Center" Foreground="#A0A0A0"/>
+                            </Grid>
+                        </ui:ListView.Items>
+                    </ui:ListView>
+                </StackPanel>
+            </ui:Card>
+        </Grid>
+    </ScrollViewer>
+</Page>

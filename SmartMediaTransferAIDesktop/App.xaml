@@ -18,6 +18,12 @@
 
             <Color x:Key="SuccessColor">#22C55E</Color>
             <SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource SuccessColor}"/>
+
+            <Color x:Key="WarningColor">#F59E0B</Color>
+            <SolidColorBrush x:Key="WarningBrush" Color="{StaticResource WarningColor}"/>
+
+            <Color x:Key="ErrorColor">#EF4444</Color>
+            <SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource ErrorColor}"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
