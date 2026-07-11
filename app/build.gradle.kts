@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 }
 
@@ -33,6 +34,7 @@ dependencies {
     implementation(project(":ui"))
     implementation(Libs.activityCompose)
     implementation(Libs.navigationCompose)
+    implementation(Libs.hiltNavigationCompose)
     implementation(project(":ai"))
     implementation(project(":watch"))
     implementation(project(":health"))
@@ -42,5 +44,6 @@ dependencies {
     implementation(project(":sport"))
     implementation(Libs.coroutinesCore)
     implementation(Libs.hiltAndroid)
+    kapt(Libs.hiltCompiler)
     implementation(project(":core"))
 }
