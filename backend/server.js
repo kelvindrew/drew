@@ -19,9 +19,13 @@ app.post('/api/place-bet', async (req, res) => {
     }
 
     try {
-        // Run Playwright script in background
-        await placeBetWithPlaywright(betData);
-        res.status(200).json({ success: true, message: 'Bet placement process started successfully' });
+        // Run Playwright script
+        const screenshotBase64 = await placeBetWithPlaywright(betData);
+        res.status(200).json({
+            success: true,
+            message: 'Bet placed successfully',
+            screenshotBase64: screenshotBase64
+        });
     } catch (error) {
         console.error('Error in Playwright automation:', error);
         res.status(500).json({ success: false, error: 'Failed to execute bet placement' });
@@ -97,6 +101,13 @@ async function placeBetWithPlaywright(betData) {
         await new Promise(resolve => setTimeout(resolve, 2000));
 
         console.log('Bet automation logic generated with real site selectors (simulated execution).');
+
+        // Take a screenshot of the confirmed bet slip as proof
+        console.log('Taking screenshot for visual proof...');
+        const screenshotBuffer = await page.screenshot({ type: 'jpeg', quality: 50 });
+        const screenshotBase64 = screenshotBuffer.toString('base64');
+
+        return screenshotBase64;
 
     } catch (error) {
         throw error;

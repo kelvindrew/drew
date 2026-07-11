@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  betpro-auto-clicker:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+    restart: unless-stopped
+    # On alloue un peu plus de mémoire partagée pour éviter les crashs de Chromium sous Docker
+    shm_size: '1gb'

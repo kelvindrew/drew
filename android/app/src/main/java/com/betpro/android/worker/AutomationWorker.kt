@@ -17,6 +17,9 @@ import kotlinx.coroutines.withContext
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 @HiltWorker
 class AutomationWorker @AssistedInject constructor(
@@ -58,14 +61,23 @@ class AutomationWorker @AssistedInject constructor(
                 val combinedOdds = event1.odds1 * event2.odds1
 
                 // 4. Trigger Node.js Auto-Clicker via Local API
-                val success = triggerAutoClicker(event1.id, "1", 10.0) // Mocking stake and selection
+                val response = triggerAutoClicker(event1.id, "1", 10.0) // Mocking stake and selection
 
-                if (success) {
+                if (response != null && response.getBoolean("success")) {
+                    val screenshotBase64 = response.optString("screenshotBase64", "")
+                    val notificationMessage = if (screenshotBase64.isNotEmpty()) {
+                        "Pari double placé sur ${event1.homeTeam} et ${event2.homeTeam}. (Preuve visuelle reçue)"
+                    } else {
+                        "Pari double placé sur ${event1.homeTeam} et ${event2.homeTeam} (Cote: ${String.format("%.2f", combinedOdds)})"
+                    }
+
                     NotificationUtils.showNotification(
                         appContext,
                         "Pari Automatique Placé",
-                        "Pari double placé sur ${event1.homeTeam} et ${event2.homeTeam} (Cote: ${String.format("%.2f", combinedOdds)})"
+                        notificationMessage
                     )
+
+                    // Here we would save the screenshotBase64 to Room DB or DataStore to display in StatisticsScreen
                 } else {
                     NotificationUtils.showNotification(
                         appContext,
@@ -82,7 +94,7 @@ class AutomationWorker @AssistedInject constructor(
         }
     }
 
-    private fun triggerAutoClicker(matchId: String, odds: String, stake: Double): Boolean {
+    private fun triggerAutoClicker(matchId: String, odds: String, stake: Double): JSONObject? {
         return try {
             // Assuming Node.js is running locally or on a reachable server
             // For Android emulator pointing to host localhost, use 10.0.2.2
@@ -107,10 +119,17 @@ class AutomationWorker @AssistedInject constructor(
             outputWriter.close()
 
             val responseCode = connection.responseCode
-            responseCode == 200
+            if (responseCode == 200) {
+                val reader = BufferedReader(InputStreamReader(connection.inputStream))
+                val responseString = reader.readText()
+                reader.close()
+                JSONObject(responseString)
+            } else {
+                null
+            }
         } catch (e: Exception) {
             e.printStackTrace()
-            false
+            null
         }
     }
 }

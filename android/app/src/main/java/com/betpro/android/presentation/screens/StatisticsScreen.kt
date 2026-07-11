@@ -28,6 +28,10 @@ fun StatisticsScreen() {
         BetHistoryItem("Barcelone vs Juventus", "Perdu", "- 10.00 $", Color(0xFFFF5252))
     )
 
+    // Mock Base64 Image string for demonstration
+    // In reality, this comes from DataStore/Room populated by AutomationWorker
+    val mockScreenshotBase64 = ""
+
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text("Évolution du Capital", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
         Spacer(modifier = Modifier.height(16.dp))
@@ -49,15 +53,23 @@ fun StatisticsScreen() {
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Column {
-                            Text(bet.match, fontWeight = FontWeight.Bold)
-                            Text(bet.status, color = bet.color, style = MaterialTheme.typography.bodySmall)
+                    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Column {
+                                Text(bet.match, fontWeight = FontWeight.Bold)
+                                Text(bet.status, color = bet.color, style = MaterialTheme.typography.bodySmall)
+                            }
+                            Text(bet.amount, color = bet.color, fontWeight = FontWeight.Bold)
                         }
-                        Text(bet.amount, color = bet.color, fontWeight = FontWeight.Bold)
+                        if (bet.status == "Gagné" || bet.status == "Preuve Disponible") {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Button(onClick = { /* Open full screen image using Base64 */ }, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), contentColor = MaterialTheme.colorScheme.primary)) {
+                                Text("📸 Voir la preuve visuelle")
+                            }
+                        }
                     }
                 }
             }
