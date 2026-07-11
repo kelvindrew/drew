@@ -14,23 +14,19 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import com.betpro.android.presentation.viewmodel.StatisticsViewModel
 
 @Composable
-fun StatisticsScreen() {
-    // Mock History Data: simulating capital progression over bets
+fun StatisticsScreen(
+    viewModel: StatisticsViewModel = hiltViewModel()
+) {
+    val betHistory by viewModel.betHistory.collectAsState()
+
+    // Mock History Data: simulating capital progression over bets (would come from DB too)
     val capitalHistory = listOf(1000f, 990f, 970f, 1010f, 1000f, 1020f, 1010f, 1050f, 1040f, 1080f, 1250f)
-
-    // Mock Bet History
-    val recentBets = listOf(
-        BetHistoryItem("Real Madrid vs Man City", "Gagné", "+ 40.00 $", Color(0xFF00E676)),
-        BetHistoryItem("Arsenal vs Chelsea", "Perdu", "- 10.00 $", Color(0xFFFF5252)),
-        BetHistoryItem("PSG vs Bayern", "Gagné", "+ 20.00 $", Color(0xFF00E676)),
-        BetHistoryItem("Barcelone vs Juventus", "Perdu", "- 10.00 $", Color(0xFFFF5252))
-    )
-
-    // Mock Base64 Image string for demonstration
-    // In reality, this comes from DataStore/Room populated by AutomationWorker
-    val mockScreenshotBase64 = ""
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text("Évolution du Capital", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
@@ -47,27 +43,32 @@ fun StatisticsScreen() {
         Text("Historique des Paris", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
         Spacer(modifier = Modifier.height(16.dp))
 
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(recentBets) { bet ->
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-                ) {
-                    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Column {
-                                Text(bet.match, fontWeight = FontWeight.Bold)
-                                Text(bet.status, color = bet.color, style = MaterialTheme.typography.bodySmall)
+        if (betHistory.isEmpty()) {
+            Text("Aucun pari enregistré pour le moment.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+        } else {
+            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                items(betHistory) { bet ->
+                    val color = if (bet.status == "Gagné" || bet.status == "Preuve Disponible") Color(0xFF00E676) else Color(0xFFFF5252)
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+                    ) {
+                        Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Column {
+                                    Text(bet.matchName, fontWeight = FontWeight.Bold)
+                                    Text(bet.status, color = color, style = MaterialTheme.typography.bodySmall)
+                                }
+                                Text(bet.amountOrOdds, color = color, fontWeight = FontWeight.Bold)
                             }
-                            Text(bet.amount, color = bet.color, fontWeight = FontWeight.Bold)
-                        }
-                        if (bet.status == "Gagné" || bet.status == "Preuve Disponible") {
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Button(onClick = { /* Open full screen image using Base64 */ }, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), contentColor = MaterialTheme.colorScheme.primary)) {
-                                Text("📸 Voir la preuve visuelle")
+                            if (!bet.screenshotBase64.isNullOrEmpty()) {
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Button(onClick = { /* Open full screen image using Base64 */ }, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), contentColor = MaterialTheme.colorScheme.primary)) {
+                                    Text("📸 Voir la preuve visuelle")
+                                }
                             }
                         }
                     }
@@ -76,8 +77,6 @@ fun StatisticsScreen() {
         }
     }
 }
-
-data class BetHistoryItem(val match: String, val status: String, val amount: String, val color: Color)
 
 @Composable
 fun CapitalChart(data: List<Float>, modifier: Modifier = Modifier) {

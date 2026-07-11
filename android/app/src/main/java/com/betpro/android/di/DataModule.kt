@@ -53,4 +53,28 @@ object DataModule {
     ): com.betpro.android.domain.repository.SettingsRepository {
         return com.betpro.android.data.local.SettingsRepositoryImpl(context)
     }
+
+    @Provides
+    @Singleton
+    fun provideBetProDatabase(
+        @dagger.hilt.android.qualifiers.ApplicationContext context: android.content.Context
+    ): com.betpro.android.data.local.room.BetProDatabase {
+        return androidx.room.Room.databaseBuilder(
+            context,
+            com.betpro.android.data.local.room.BetProDatabase::class.java,
+            "betpro_db"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideBetHistoryDao(database: com.betpro.android.data.local.room.BetProDatabase): com.betpro.android.data.local.room.BetHistoryDao {
+        return database.betHistoryDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideBetHistoryRepository(dao: com.betpro.android.data.local.room.BetHistoryDao): com.betpro.android.domain.repository.BetHistoryRepository {
+        return com.betpro.android.data.repository.BetHistoryRepositoryImpl(dao)
+    }
 }

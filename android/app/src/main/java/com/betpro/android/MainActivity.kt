@@ -19,9 +19,17 @@ import com.betpro.android.presentation.theme.BetProTheme
 import com.betpro.android.presentation.screens.MainScreen
 import com.betpro.android.worker.AutomationWorker
 import java.util.concurrent.TimeUnit
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
+
+    private var isAuthenticated by mutableStateOf(false)
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -42,10 +50,40 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+                    if (isAuthenticated) {
+                        MainScreen()
+                    } else {
+                        androidx.compose.runtime.LaunchedEffect(Unit) {
+                            authenticateUser()
+                        }
+                    }
                 }
             }
         }
+    }
+
+    private fun authenticateUser() {
+        val executor = ContextCompat.getMainExecutor(this)
+        val biometricPrompt = BiometricPrompt(this, executor,
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    super.onAuthenticationSucceeded(result)
+                    isAuthenticated = true
+                }
+
+                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                    super.onAuthenticationError(errorCode, errString)
+                    // In a real app, handle error (e.g. exit app if authentication fails repeatedly)
+                }
+            })
+
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Authentification Requise")
+            .setSubtitle("Veuillez vous authentifier pour accéder à BETPRO")
+            .setAllowedAuthenticators(androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG or androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+            .build()
+
+        biometricPrompt.authenticate(promptInfo)
     }
 
     private fun checkNotificationPermissionAndSetupWorker() {

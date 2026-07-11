@@ -86,8 +86,17 @@ dependencies {
     // DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
+    // Room Database
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+
     // WorkManager
     implementation("androidx.work:work-runtime-ktx:2.9.0")
+
+    // Biometric Authentication
+    implementation("androidx.biometric:biometric:1.1.0")
 
     // Google Gemini SDK (Generative AI)
     implementation("com.google.ai.client.generativeai:generativeai:0.2.0")

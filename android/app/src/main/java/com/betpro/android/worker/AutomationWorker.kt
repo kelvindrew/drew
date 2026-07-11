@@ -20,6 +20,8 @@ import java.net.URL
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import com.betpro.android.data.local.room.BetHistoryEntity
+import com.betpro.android.domain.repository.BetHistoryRepository
 
 @HiltWorker
 class AutomationWorker @AssistedInject constructor(
@@ -28,7 +30,8 @@ class AutomationWorker @AssistedInject constructor(
     private val sportEventRepository: SportEventRepository,
     private val findDoubleBetOpportunitiesUseCase: FindDoubleBetOpportunitiesUseCase,
     private val checkStopLossUseCase: CheckStopLossUseCase,
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    private val betHistoryRepository: BetHistoryRepository
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
@@ -77,7 +80,17 @@ class AutomationWorker @AssistedInject constructor(
                         notificationMessage
                     )
 
-                    // Here we would save the screenshotBase64 to Room DB or DataStore to display in StatisticsScreen
+                    // Save the bet details and screenshot to Room DB
+                    val historyEntity = BetHistoryEntity(
+                        matchName = "${event1.homeTeam} & ${event2.homeTeam}",
+                        status = if (screenshotBase64.isNotEmpty()) "Preuve Disponible" else "En cours",
+                        amountOrOdds = String.format("%.2f", combinedOdds),
+                        isWin = false, // Not resolved yet
+                        timestamp = System.currentTimeMillis(),
+                        screenshotBase64 = screenshotBase64.ifEmpty { null }
+                    )
+                    betHistoryRepository.insertBet(historyEntity)
+
                 } else {
                     NotificationUtils.showNotification(
                         appContext,
@@ -102,6 +115,8 @@ class AutomationWorker @AssistedInject constructor(
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "POST"
             connection.setRequestProperty("Content-Type", "application/json")
+            // Send the secret token configured in backend/.env
+            connection.setRequestProperty("Authorization", "Bearer betpro-secret-token-1234")
             connection.doOutput = true
 
             val jsonPayload = """
