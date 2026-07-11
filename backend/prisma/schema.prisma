@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Church {
+  id        String   @id @default(cuid())
+  name      String
+  domain    String?  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users     User[]
+  campuses  Campus[]
+}
+
+model Campus {
+  id        String   @id @default(cuid())
+  name      String
+  churchId  String
+  church    Church   @relation(fields: [churchId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users     User[]
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  role      Role     @default(MEMBER)
+  churchId  String
+  church    Church   @relation(fields: [churchId], references: [id])
+  campusId  String?
+  campus    Campus?  @relation(fields: [campusId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  SUPER_ADMIN
+  LEAD_PASTOR
+  PASTOR
+  ELDER
+  DEACON
+  DEPARTMENT_HEAD
+  TREASURER
+  SECRETARY
+  CELL_LEADER
+  MEMBER
+  VISITOR
+}
