@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -62,17 +61,15 @@ fun DeviceScannerScreen(
             Text(
                 "Jumelage",
                 color = Color.White,
-                fontSize = 34.sp,
+                fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 0.4.sp
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                if (isScanning) "Recherche d'appareils à proximité..."
-                else if (deviceFound) "Appareil détecté."
-                else "Approchez votre montre de l'iPhone.",
+                "Recherche...", // As seen in mockup
                 color = Color.Gray,
-                fontSize = 17.sp,
+                fontSize = 15.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = 20.dp)
             )
@@ -82,9 +79,7 @@ fun DeviceScannerScreen(
             modifier = Modifier.size(300.dp),
             contentAlignment = Alignment.Center
         ) {
-            if (isScanning) {
-                RadarAnimation()
-            }
+            RadarAnimation()
 
             // Central iOS styled Watch Icon
             Box(
@@ -94,22 +89,24 @@ fun DeviceScannerScreen(
                     .background(Color(0xFF1C1C1E)),
                 contentAlignment = Alignment.Center
             ) {
-                Text("⌚️", fontSize = 48.sp)
+                 // Simulated hands of the clock
+                 Box(modifier = Modifier.width(2.dp).height(30.dp).background(Color.White).align(Alignment.Center).offset(y = (-15).dp))
+                 Box(modifier = Modifier.width(30.dp).height(2.dp).background(Color.White).align(Alignment.Center).offset(x = 15.dp, y = (-15).dp))
             }
 
-            if (deviceFound) {
-                // AirPods style popup card
-                Box(modifier = Modifier.offset(y = 120.dp)) {
-                    Column(
-                        modifier = Modifier
-                            .background(Color(0xFF1C1C1E), RoundedCornerShape(20.dp))
-                            .padding(horizontal = 32.dp, vertical = 16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text("Xiaomi Watch S5", color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.SemiBold)
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text("Connecté", color = Color(0xFF007AFF), fontSize = 15.sp)
-                    }
+            // AirPods style popup card from mockup
+            Box(modifier = Modifier.offset(y = 100.dp)) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp)
+                        .background(Color(0xFF2C2C2E).copy(alpha = 0.9f), RoundedCornerShape(16.dp))
+                        .padding(horizontal = 20.dp, vertical = 16.dp),
+                    horizontalAlignment = Alignment.Start
+                ) {
+                    Text("Trouvé", color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text("Xiaomi Watch S5 - Connecté", color = Color.LightGray, fontSize = 13.sp)
                 }
             }
         }
@@ -122,7 +119,6 @@ fun DeviceScannerScreen(
                     bluetoothPermissions.launchMultiplePermissionRequest()
                 }
             },
-            enabled = !isScanning,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF007AFF), // Apple Blue
                 contentColor = Color.White,
@@ -136,9 +132,7 @@ fun DeviceScannerScreen(
             shape = RoundedCornerShape(14.dp)
         ) {
             Text(
-                if (!bluetoothPermissions.allPermissionsGranted) "Autoriser le Bluetooth"
-                else if (deviceFound) "Continuer"
-                else "Commencer le jumelage",
+                "Activer le Bluetooth",
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 17.sp
             )
@@ -149,28 +143,32 @@ fun DeviceScannerScreen(
 @Composable
 fun RadarAnimation() {
     val infiniteTransition = rememberInfiniteTransition(label = "")
-    val radius by infiniteTransition.animateFloat(
-        initialValue = 50f,
-        targetValue = 200f,
+    val phase1 by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
         animationSpec = infiniteRepeatable(
-            animation = tween(2500, easing = CubicBezierEasing(0.4f, 0.0f, 0.2f, 1f)), // More organic curve
-            repeatMode = RepeatMode.Restart
-        ), label = ""
-    )
-    val alpha by infiniteTransition.animateFloat(
-        initialValue = 0.5f,
-        targetValue = 0f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(2500, easing = LinearEasing),
+            animation = tween(3000, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
         ), label = ""
     )
 
     Canvas(modifier = Modifier.fillMaxSize()) {
-        drawCircle(
-            color = Color(0xFF007AFF).copy(alpha = alpha),
-            radius = radius.dp.toPx(),
-            style = Stroke(width = 1.dp.toPx()) // Thinner, elegant stroke
-        )
+        val maxRadius = size.minDimension / 2f
+        val rippleCount = 4
+
+        for (i in 0 until rippleCount) {
+            val progress = (phase1 + (i.toFloat() / rippleCount)) % 1f
+            val currentRadius = progress * maxRadius
+
+            // Fading out as it grows
+            val alpha = (1f - progress) * 0.4f
+
+            drawCircle(
+                color = Color(0xFF34C759), // Tinted slightly green as seen in mockup
+                radius = currentRadius,
+                alpha = alpha,
+                style = Stroke(width = 40f * (1f - progress)) // Thick to thin stroke
+            )
+        }
     }
 }

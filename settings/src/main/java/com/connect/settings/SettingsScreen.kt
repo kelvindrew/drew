@@ -29,35 +29,48 @@ fun SettingsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF2F2F7)) // iOS Settings typical Light Background (Adjusted by theme in reality, hardcoded here for iOS look)
-            .padding(top = 48.dp)
+            .background(Color.Black) // Dark Mode Background as per mockup
+            .padding(top = 48.dp, start = 16.dp, end = 16.dp)
     ) {
-        Text(
-            "Réglages",
-            color = Color.Black,
-            fontSize = 34.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(horizontal = 20.dp).padding(bottom = 16.dp)
-        )
+        Column(modifier = Modifier.padding(bottom = 24.dp)) {
+            Text(
+                "Réglages",
+                color = Color.White.copy(alpha = 0.5f),
+                fontSize = 16.sp,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+            Text(
+                "(Settings)",
+                color = Color.White.copy(alpha = 0.5f),
+                fontSize = 12.sp,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
+            Text(
+                "Réglages",
+                color = Color.White,
+                fontSize = 34.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 0.4.sp
+            )
+        }
 
-        // iOS Style Grouped List
+        // iOS Style Grouped List (Dark Mode)
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(Color.White)
+                .clip(RoundedCornerShape(12.dp))
+                .background(Color(0xFF1C1C1E)) // Typical iOS elevated background
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                    .padding(horizontal = 16.dp, vertical = 8.dp), // Adjust vertical padding for switch height
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     "Mode Sombre",
-                    color = Color.Black,
+                    color = Color.White,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Normal
                 )
@@ -68,22 +81,31 @@ fun SettingsScreen(
                         checkedThumbColor = Color.White,
                         checkedTrackColor = Color(0xFF34C759), // Apple Green
                         uncheckedThumbColor = Color.White,
-                        uncheckedTrackColor = Color(0xFFE5E5EA),
+                        uncheckedTrackColor = Color(0xFF3A3A3C), // Darker gray for unchecked
                         uncheckedBorderColor = Color.Transparent
                     )
                 )
             }
-            Divider(color = Color(0xFFE5E5EA), thickness = 0.5.dp, modifier = Modifier.padding(start = 16.dp))
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(Color(0xFF1C1C1E))
+        ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 18.dp),
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     "Bluetooth",
-                    color = Color.Black,
+                    color = Color.White,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Normal
                 )
@@ -94,5 +116,14 @@ fun SettingsScreen(
                 )
             }
         }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Text(
+            "Settings",
+            color = Color.White,
+            fontSize = 22.sp,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
     }
 }

@@ -53,11 +53,11 @@ fun ConnectPremiumApp() {
     Scaffold(
         bottomBar = {
             NavigationBar(
-                containerColor = Color(0xFF1C1C1E).copy(alpha = 0.9f),
+                containerColor = Color(0xFF1C1C1E).copy(alpha = 0.95f),
                 contentColor = Color.White
             ) {
                 NavigationBarItem(
-                    icon = { Text("􀎟", style = MaterialTheme.typography.bodyLarge) },
+                    icon = { Text("􀎟", style = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp)) },
                     label = { Text("Résumé", style = MaterialTheme.typography.bodyMedium.copy(fontSize = 10.sp)) },
                     selected = currentRoute == "dashboard",
                     onClick = { navController.navigate("dashboard") { launchSingleTop = true } },
@@ -70,7 +70,7 @@ fun ConnectPremiumApp() {
                     )
                 )
                 NavigationBarItem(
-                    icon = { Text("􀺽", style = MaterialTheme.typography.bodyLarge) },
+                    icon = { Text("􀺽", style = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp)) },
                     label = { Text("Cadrans", style = MaterialTheme.typography.bodyMedium.copy(fontSize = 10.sp)) },
                     selected = currentRoute == "store",
                     onClick = { navController.navigate("store") { launchSingleTop = true } },
@@ -83,7 +83,7 @@ fun ConnectPremiumApp() {
                     )
                 )
                 NavigationBarItem(
-                    icon = { Text("􀌨", style = MaterialTheme.typography.bodyLarge) }, // SF Symbol Chat
+                    icon = { Text("􀌨", style = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp)) },
                     label = { Text("Coach", style = MaterialTheme.typography.bodyMedium.copy(fontSize = 10.sp)) },
                     selected = currentRoute == "coach_chat",
                     onClick = { navController.navigate("coach_chat") { launchSingleTop = true } },
@@ -96,7 +96,7 @@ fun ConnectPremiumApp() {
                     )
                 )
                 NavigationBarItem(
-                    icon = { Text("􀤆", style = MaterialTheme.typography.bodyLarge) },
+                    icon = { Text("􀤆", style = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp)) },
                     label = { Text("Jumelage", style = MaterialTheme.typography.bodyMedium.copy(fontSize = 10.sp)) },
                     selected = currentRoute == "scanner",
                     onClick = { navController.navigate("scanner") { launchSingleTop = true } },
@@ -109,7 +109,7 @@ fun ConnectPremiumApp() {
                     )
                 )
                 NavigationBarItem(
-                    icon = { Text("􀍟", style = MaterialTheme.typography.bodyLarge) },
+                    icon = { Text("􀍟", style = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp)) },
                     label = { Text("Réglages", style = MaterialTheme.typography.bodyMedium.copy(fontSize = 10.sp)) },
                     selected = currentRoute == "settings",
                     onClick = { navController.navigate("settings") { launchSingleTop = true } },

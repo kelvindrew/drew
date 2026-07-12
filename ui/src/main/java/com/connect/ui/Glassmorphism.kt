@@ -20,7 +20,7 @@ fun Modifier.appleCardStyle(): Modifier = composed {
 fun Modifier.glassmorphism(): Modifier = composed {
     this
         .clip(RoundedCornerShape(24.dp))
-        .background(Color.White.copy(alpha = 0.05f)) // More subtle
-        .border(0.5.dp, Color.White.copy(alpha = 0.1f), RoundedCornerShape(24.dp))
-        .padding(20.dp)
+        .background(Color(0xFF333333).copy(alpha = 0.5f)) // Translucent gray
+        .border(0.5.dp, Color.White.copy(alpha = 0.2f), RoundedCornerShape(24.dp))
+        .padding(16.dp)
 }

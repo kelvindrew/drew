@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -23,9 +24,8 @@ import coil.compose.AsyncImage
 data class Watchface(val id: Int, val name: String, val author: String, val imageUrl: String, val tag: String)
 
 val mockWatchfaces = listOf(
-    Watchface(1, "OLED Minimal", "Studio Premium", "https://example.com/mock1.png", "ÉDITORIAL"),
-    Watchface(2, "Chronograph Pro", "Rolex Style", "https://example.com/mock2.png", "NOUVEAU"),
-    Watchface(3, "Fitness Circles", "Connect Health", "https://example.com/mock3.png", "POPULAIRE")
+    Watchface(1, "OLED Minimal", "Xiaomi A...", "https://example.com/mock1.png", "ÉDITORIAL"),
+    Watchface(2, "Chronograph Pro", "Rolex Style", "https://example.com/mock2.png", "NOUVEAU")
 )
 
 @Composable
@@ -34,18 +34,32 @@ fun WatchfaceStoreScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black) // App Store Dark Mode background
-            .padding(horizontal = 20.dp),
+            .padding(horizontal = 16.dp),
         contentPadding = PaddingValues(top = 48.dp, bottom = 48.dp),
-        verticalArrangement = Arrangement.spacedBy(32.dp)
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         item {
-            Text(
-                "Aujourd'hui",
-                color = Color.White,
-                fontSize = 34.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 0.4.sp
-            )
+            Column(modifier = Modifier.padding(bottom = 8.dp)) {
+                Text(
+                    "Cadrans",
+                    color = Color.White.copy(alpha = 0.5f),
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                Text(
+                    "(Watchfaces Store)",
+                    color = Color.White.copy(alpha = 0.5f),
+                    fontSize = 12.sp,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+                Text(
+                    "Aujourd'hui",
+                    color = Color.White,
+                    fontSize = 34.sp,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 0.4.sp
+                )
+            }
         }
 
         items(mockWatchfaces) { watchface ->
@@ -56,70 +70,82 @@ fun WatchfaceStoreScreen() {
 
 @Composable
 fun AppStoreCard(watchface: Watchface) {
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(24.dp)) // Large corner radius like iOS
-            .background(Color(0xFF1C1C1E))
+            .height(280.dp)
+            .clip(RoundedCornerShape(24.dp))
+            .background(Color(0xFF2C3E50)) // Deep blue background as seen in mockup
     ) {
-        // Tag (Top)
-        Text(
-            text = watchface.tag,
-            color = Color(0xFF007AFF), // Apple Blue
-            fontSize = 11.sp,
-            fontWeight = FontWeight.Bold,
-            letterSpacing = 0.5.sp,
-            modifier = Modifier.padding(start = 16.dp, top = 16.dp)
-        )
+        // Tag (Top Left)
+        Box(
+            modifier = Modifier
+                .padding(16.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .background(Color(0xFF3498DB))
+                .padding(horizontal = 8.dp, vertical = 4.dp)
+        ) {
+            Text(
+                text = watchface.tag,
+                color = Color.White,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 0.5.sp
+            )
+        }
 
-        // Title
+        // Title (Top Rightish)
         Text(
             text = watchface.name,
             color = Color.White,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(start = 16.dp, top = 4.dp, bottom = 16.dp)
+            fontSize = 20.sp,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(top = 16.dp, end = 16.dp).align(Alignment.TopEnd)
         )
 
-        // Hero Image
+        // Mock Watch image (Center)
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp)
-                .background(Color.DarkGray),
-            contentAlignment = Alignment.Center
+            modifier = Modifier.align(Alignment.Center)
         ) {
-            AsyncImage(
-                model = watchface.imageUrl,
-                contentDescription = watchface.name,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
-            // Fake watchface for visual until URL is real
-            Text("⌚️", fontSize = 100.sp)
+            // Using a simple square/circle box with an X to simulate the minimalist analog watch in mockup
+            Box(
+                modifier = Modifier
+                    .size(120.dp)
+                    .clip(RoundedCornerShape(32.dp))
+                    .background(Color.Black)
+            ) {
+                 // Simulated hands of the clock
+                 Box(modifier = Modifier.width(2.dp).height(40.dp).background(Color.White).align(Alignment.Center).offset(y = (-20).dp))
+                 Box(modifier = Modifier.width(40.dp).height(2.dp).background(Color.White).align(Alignment.Center).offset(x = 20.dp, y = (-20).dp))
+            }
         }
 
-        // Footer / Action
+        // Footer / Action (Bottom)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .align(Alignment.BottomCenter)
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column {
-                Text(watchface.name, color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
-                Text(watchface.author, color = Color.Gray, fontSize = 13.sp)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                // Mock Avatar
+                Box(modifier = Modifier.size(24.dp).clip(CircleShape).background(Color.LightGray), contentAlignment = Alignment.Center) {
+                    Text("👨", fontSize = 14.sp)
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(watchface.author, color = Color.White.copy(alpha = 0.6f), fontSize = 14.sp)
             }
 
             Button(
                 onClick = { },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF2C2C2E), // Secondary elevated
-                    contentColor = Color(0xFF007AFF) // Apple Blue text
+                    containerColor = Color.White.copy(alpha = 0.2f),
+                    contentColor = Color.White
                 ),
                 shape = RoundedCornerShape(16.dp),
-                contentPadding = PaddingValues(horizontal = 24.dp, vertical = 8.dp)
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 Text("OBTENIR", fontWeight = FontWeight.Bold, fontSize = 13.sp)
             }
