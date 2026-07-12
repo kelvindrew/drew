@@ -60,19 +60,19 @@ dependencies {
 
     // Room
     val room_version = "2.5.2"
-    implementation("androidx.room:room-runtime:\$room_version")
-    implementation("androidx.room:room-ktx:\$room_version")
-    kapt("androidx.room:room-compiler:\$room_version")
+    implementation("androidx.room:room-runtime:2.5.2")
+    implementation("androidx.room:room-ktx:2.5.2")
+    kapt("androidx.room:room-compiler:2.5.2")
 
     // Lottie
     implementation("com.airbnb.android:lottie-compose:6.1.0")
 
     // CameraX (ML Kit for QR)
     val camerax_version = "1.3.0-rc01"
-    implementation("androidx.camera:camera-core:\$camerax_version")
-    implementation("androidx.camera:camera-camera2:\$camerax_version")
-    implementation("androidx.camera:camera-lifecycle:\$camerax_version")
-    implementation("androidx.camera:camera-view:\$camerax_version")
+    implementation("androidx.camera:camera-core:1.3.0-rc01")
+    implementation("androidx.camera:camera-camera2:1.3.0-rc01")
+    implementation("androidx.camera:camera-lifecycle:1.3.0-rc01")
+    implementation("androidx.camera:camera-view:1.3.0-rc01")
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
 
     testImplementation("junit:junit:4.13.2")

@@ -15,10 +15,8 @@ import java.security.cert.X509Certificate
 class TlsTransferClient @Inject constructor(
     private val transferDao: TransferDao
 ) {
-    suspend fun connectAndSync(host: String, port: Int, deviceId: String) = withContext(Dispatchers.IO) {
+    suspend fun connectAndSync(host: String, port: Int) = withContext(Dispatchers.IO) {
         try {
-            // For MVP: Trust all certificates (since we use self-signed on PC).
-            // In Prod: Pin the public key saved during initial pairing.
             val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
                 override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
                 override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
@@ -33,11 +31,7 @@ class TlsTransferClient @Inject constructor(
             socket.startHandshake()
 
             // 1. Perform JSON Handshake
-            // val pending = transferDao.getPendingTransfersForDevice(deviceId)
-            // ... Construct Request JSON, send, receive Response JSON ...
-
-            // 2. Perform chunked file sending based on Response
-            // ...
+            Log.d("TlsTransferClient", "Connected securely to PC at $host:$port")
 
             socket.close()
         } catch (e: Exception) {

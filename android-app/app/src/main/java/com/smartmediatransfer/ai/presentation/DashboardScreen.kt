@@ -47,7 +47,7 @@ fun DashboardScreen() {
                         verticalArrangement = Arrangement.Center
                     ) {
                         Icon(
-                            Icons.Default.CloudSync,
+                            Icons.Default.Share,
                             contentDescription = null,
                             tint = ElectricBlue,
                             modifier = Modifier.size(48.dp)
@@ -64,7 +64,7 @@ fun DashboardScreen() {
                             .padding(16.dp),
                         containerColor = ElectricBlue
                     ) {
-                        Icon(Icons.Default.QrCodeScanner, contentDescription = "Scan", tint = Color.White)
+                        Icon(Icons.Default.Search, contentDescription = "Scan", tint = Color.White)
                     }
                 }
             }
@@ -90,7 +90,7 @@ fun DashboardScreen() {
                             .background(ElectricBlue.copy(alpha = 0.2f)),
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(Icons.Default.Movie, contentDescription = null, tint = ElectricBlue)
+                        Icon(Icons.Default.PlayArrow, contentDescription = null, tint = ElectricBlue)
                     }
                     Spacer(modifier = Modifier.width(16.dp))
                     Column(modifier = Modifier.weight(1f)) {
