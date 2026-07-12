@@ -1,0 +1,7 @@
+Implement The Odds API temporal arbitrage Android app and Playwright backend.
+
+- Initialized Android app with Kotlin, Jetpack Compose, Dagger Hilt, Retrofit2, and Biometric Auth.
+- Developed a Dashboard with a Radar animation using a Premium Dark Mode theme with Neon Green accents.
+- Created ArbitrageWorker using WorkManager to poll The Odds API for temporal arbitrage opportunities.
+- Initialized Node.js backend using Express and Playwright for automating bets.
+- Added comprehensive documentation and build configurations.
