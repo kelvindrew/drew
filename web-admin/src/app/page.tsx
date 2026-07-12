@@ -43,7 +43,7 @@ export default function Home() {
             <Grid item xs={12} md={7}>
               <Chip label="Service Premium Katanga" color="primary" sx={{ mb: 3, fontWeight: 'bold' }} />
               <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 800, lineHeight: 1.2 }}>
-                L'excellence du <br/>
+                L&apos;excellence du <br/>
                 <span style={{ color: '#E3000F' }}>transport</span> en RDC.
               </Typography>
               <Typography variant="h6" sx={{ mb: 4, color: 'rgba(255,255,255,0.8)', fontWeight: 400, maxWidth: '600px' }}>
@@ -129,7 +129,7 @@ export default function Home() {
                   Espace Professionnel
                 </Typography>
                 <Typography color="textSecondary" sx={{ mb: 3 }}>
-                  Accédez au tableau de bord pour gérer vos réservations d'entreprise, factures, flottes et statistiques d'expédition.
+                  Accédez au tableau de bord pour gérer vos réservations d&apos;entreprise, factures, flottes et statistiques d&apos;expédition.
                 </Typography>
               </CardContent>
               <Box p={3} pt={0} textAlign="center">
@@ -154,7 +154,7 @@ export default function Home() {
                 Voyagez au-delà <br/> de vos attentes
               </Typography>
               <Typography variant="body1" color="textSecondary" sx={{ mb: 4, fontSize: '1.1rem', lineHeight: 1.7 }}>
-                Mulykap est une entreprise leader dans le secteur du transport interurbain et de la logistique en République Démocratique du Congo. Forte de plusieurs années d'expérience, notre mission est de redéfinir les standards du voyage sur route en offrant un service hautement sécurisé, ponctuel et incroyablement confortable.
+                Mulykap est une entreprise leader dans le secteur du transport interurbain et de la logistique en République Démocratique du Congo. Forte de plusieurs années d&apos;expérience, notre mission est de redéfinir les standards du voyage sur route en offrant un service hautement sécurisé, ponctuel et incroyablement confortable.
               </Typography>
 
               <Grid container spacing={3}>
@@ -212,7 +212,7 @@ export default function Home() {
                 MULYKAP<span style={{ color: '#E3000F' }}>.</span>
               </Typography>
               <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.7)', mb: 3, maxWidth: 300 }}>
-                L'excellence du transport et de la logistique en RDC. Votre sécurité et votre confort sont notre priorité.
+                L&apos;excellence du transport et de la logistique en RDC. Votre sécurité et votre confort sont notre priorité.
               </Typography>
               <Box sx={{ display: 'flex', gap: 2 }}>
                 <FacebookIcon sx={{ color: 'rgba(255,255,255,0.7)', '&:hover': { color: 'white', cursor: 'pointer' } }} />

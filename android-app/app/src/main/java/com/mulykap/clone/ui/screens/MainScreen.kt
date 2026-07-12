@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(onNavigateToBooking: () -> Unit = {}, onNavigateToPackages: () -> Unit = {}) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -36,7 +36,7 @@ fun MainScreen() {
                         fontSize = 22.sp
                     )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
+                colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.secondary,
                     titleContentColor = Color.White
                 )
@@ -107,7 +107,6 @@ fun MainScreen() {
                                 .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
                             contentAlignment = Alignment.Center
                         ) {
-                            // Placeholder for Icon
                             Text("🚌", fontSize = 24.sp)
                         }
                         Spacer(modifier = Modifier.height(12.dp))
@@ -118,7 +117,7 @@ fun MainScreen() {
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                         Button(
-                            onClick = { /* TODO */ },
+                            onClick = onNavigateToBooking,
                             modifier = Modifier.fillMaxWidth(),
                             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                         ) {
@@ -144,7 +143,6 @@ fun MainScreen() {
                                 .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)),
                             contentAlignment = Alignment.Center
                         ) {
-                            // Placeholder for Icon
                             Text("📦", fontSize = 24.sp)
                         }
                         Spacer(modifier = Modifier.height(12.dp))
@@ -155,7 +153,7 @@ fun MainScreen() {
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                         Button(
-                            onClick = { /* TODO */ },
+                            onClick = onNavigateToPackages,
                             modifier = Modifier.fillMaxWidth(),
                             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                         ) {
