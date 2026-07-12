@@ -32,6 +32,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     implementation(Libs.composeRuntime)
     implementation(Libs.composeUi)
     implementation(Libs.gemini)
