@@ -15,6 +15,7 @@ kapt {
 android {
     namespace = "com.betpro.android"
     compileSdk = 34
+    buildToolsVersion = "34.0.0"
 
     defaultConfig {
         applicationId = "com.betpro.android"
