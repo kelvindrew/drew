@@ -1,4 +1,5 @@
 using System.Windows.Controls;
+using SmartMediaTransferAIDesktop.ViewModels;
 
 namespace SmartMediaTransferAIDesktop.Views
 {
@@ -7,6 +8,7 @@ namespace SmartMediaTransferAIDesktop.Views
         public StoragePage()
         {
             InitializeComponent();
+            DataContext = App.Current.Services.GetService(typeof(StorageViewModel));
         }
     }
 }

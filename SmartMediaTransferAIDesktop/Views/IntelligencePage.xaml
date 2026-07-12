@@ -88,10 +88,10 @@
                         <TextBlock Text="L'IA suggère un déplacement basé sur vos habitudes." TextWrapping="Wrap" Foreground="#A0A0A0" Margin="0,0,0,16"/>
 
                         <TextBlock Text="Fichier détecté :" FontSize="12" Foreground="#A0A0A0"/>
-                        <TextBlock Text="D:\Downloads\Inception_1080p.mkv" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,0,0,12"/>
+                        <TextBlock Text="{Binding PendingConfirmationFileName}" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,0,0,12"/>
 
                         <TextBlock Text="Nouvel emplacement :" FontSize="12" Foreground="#A0A0A0"/>
-                        <TextBlock Text="D:\Bibliothèque\Films\Inception" FontWeight="SemiBold" Foreground="{StaticResource SuccessBrush}" TextWrapping="Wrap" Margin="0,0,0,24"/>
+                        <TextBlock Text="{Binding PendingConfirmationDestination}" FontWeight="SemiBold" Foreground="{StaticResource SuccessBrush}" TextWrapping="Wrap" Margin="0,0,0,24"/>
 
                         <Button Content="✅ Autoriser" Background="{StaticResource SuccessBrush}" Foreground="White" Margin="0,0,0,8" />
                         <Button Content="❌ Refuser" Background="{StaticResource ErrorBrush}" Foreground="White" Margin="0,0,0,8"/>

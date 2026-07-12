@@ -38,8 +38,8 @@
                     <StackPanel>
                         <ui:SymbolIcon Symbol="Database24" FontSize="28" Foreground="{StaticResource PrimaryBrush}" HorizontalAlignment="Left" Margin="0,0,0,16"/>
                         <TextBlock Text="Storage Used" FontSize="16" Foreground="#A0A0A0" Margin="0,0,0,8" />
-                        <TextBlock Text="145.2 GB" FontSize="28" FontWeight="SemiBold" />
-                        <ProgressBar Value="65" Height="4" Margin="0,16,0,0" Foreground="{StaticResource PrimaryBrush}" />
+                        <TextBlock Text="{Binding TotalStorageUsed}" FontSize="28" FontWeight="SemiBold" />
+                        <ProgressBar Value="{Binding StorageProgress}" Height="4" Margin="0,16,0,0" Foreground="{StaticResource PrimaryBrush}" />
                     </StackPanel>
                 </ui:Card>
 
@@ -48,7 +48,7 @@
                     <StackPanel>
                         <ui:SymbolIcon Symbol="Document24" FontSize="28" Foreground="{StaticResource SecondaryBrush}" HorizontalAlignment="Left" Margin="0,0,0,16"/>
                         <TextBlock Text="Total Files" FontSize="16" Foreground="#A0A0A0" Margin="0,0,0,8" />
-                        <TextBlock Text="12,408" FontSize="28" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding TotalFiles}" FontSize="28" FontWeight="SemiBold" />
                         <TextBlock Text="+234 this week" FontSize="12" Foreground="{StaticResource SuccessBrush}" Margin="0,16,0,0" />
                     </StackPanel>
                 </ui:Card>
@@ -58,7 +58,7 @@
                     <StackPanel>
                         <ui:SymbolIcon Symbol="Phone24" FontSize="28" Foreground="#06B6D4" HorizontalAlignment="Left" Margin="0,0,0,16"/>
                         <TextBlock Text="Trusted Devices" FontSize="16" Foreground="#A0A0A0" Margin="0,0,0,8" />
-                        <TextBlock Text="3" FontSize="28" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding TrustedDevicesCount}" FontSize="28" FontWeight="SemiBold" />
                         <TextBlock Text="All connected" FontSize="12" Foreground="{StaticResource SuccessBrush}" Margin="0,16,0,0" />
                     </StackPanel>
                 </ui:Card>
