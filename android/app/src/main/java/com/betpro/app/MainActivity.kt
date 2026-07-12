@@ -1,29 +1,20 @@
 package com.betpro.app
 
 import android.os.Bundle
-import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
-import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
-import androidx.core.content.ContextCompat
 import com.betpro.app.ui.theme.BetProTheme
 import com.betpro.app.ui.DashboardScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
-
-    private val isAuthenticated = mutableStateOf(false)
-
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        showBiometricPrompt()
 
         setContent {
             BetProTheme {
@@ -31,42 +22,9 @@ class MainActivity : AppCompatActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    if (isAuthenticated.value) {
-                        DashboardScreen()
-                    } else {
-                        // Show some loading or locked screen
-                    }
+                    DashboardScreen()
                 }
             }
         }
-    }
-
-    private fun showBiometricPrompt() {
-        val executor = ContextCompat.getMainExecutor(this)
-        val biometricPrompt = BiometricPrompt(this, executor,
-            object : BiometricPrompt.AuthenticationCallback() {
-                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                    super.onAuthenticationError(errorCode, errString)
-                    Toast.makeText(applicationContext, "Authentication error: $errString", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    super.onAuthenticationSucceeded(result)
-                    isAuthenticated.value = true
-                }
-
-                override fun onAuthenticationFailed() {
-                    super.onAuthenticationFailed()
-                    Toast.makeText(applicationContext, "Authentication failed", Toast.LENGTH_SHORT).show()
-                }
-            })
-
-        val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Authentification BetPro")
-            .setSubtitle("Veuillez utiliser votre empreinte pour déverrouiller")
-            .setNegativeButtonText("Annuler")
-            .build()
-
-        biometricPrompt.authenticate(promptInfo)
     }
 }

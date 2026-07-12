@@ -51,7 +51,7 @@ fun DashboardScreen() {
         topBar = {
             TopAppBar(
                 title = { Text("SYNDICAT TEMPOREL", fontWeight = FontWeight.Bold, color = Color(0xFF00E676)) },
-                colors = TopAppBarDefaults.topAppBarColors(
+                colors = TopAppBarDefaults.smallTopAppBarColors(
                     containerColor = Color(0xFF1E1E1E)
                 )
             )
@@ -88,11 +88,10 @@ fun DashboardScreen() {
                 label = { Text("Montant par pari ($)", color = Color.Gray) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth(),
-                colors = OutlinedTextFieldDefaults.colors(
+                colors = TextFieldDefaults.outlinedTextFieldColors(
                     focusedBorderColor = Color(0xFF00E676),
                     unfocusedBorderColor = Color.DarkGray,
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White
+                    textColor = Color.White,
                 ),
                 shape = RoundedCornerShape(16.dp)
             )
