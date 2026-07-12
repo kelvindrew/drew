@@ -102,20 +102,22 @@ fun StatisticsScreen(
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
                 Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally) {
-                    try {
-                        val imageBytes = Base64.decode(selectedBase64Image, Base64.DEFAULT)
-                        val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-                        if (bitmap != null) {
-                            Image(
-                                bitmap = bitmap.asImageBitmap(),
-                                contentDescription = "Preuve du Pari",
-                                modifier = Modifier.fillMaxWidth().heightIn(min = 200.dp, max = 500.dp),
-                                contentScale = androidx.compose.ui.layout.ContentScale.Fit
-                            )
-                        } else {
-                            Text("Image corrompue", modifier = Modifier.padding(32.dp))
+                    val bitmap = remember(selectedBase64Image) {
+                        try {
+                            val imageBytes = Base64.decode(selectedBase64Image, Base64.DEFAULT)
+                            BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                        } catch (e: Exception) {
+                            null
                         }
-                    } catch (e: Exception) {
+                    }
+                    if (bitmap != null) {
+                        Image(
+                            bitmap = bitmap.asImageBitmap(),
+                            contentDescription = "Preuve du Pari",
+                            modifier = Modifier.fillMaxWidth().heightIn(min = 200.dp, max = 500.dp),
+                            contentScale = androidx.compose.ui.layout.ContentScale.Fit
+                        )
+                    } else {
                         Text("Erreur lors du chargement de l'image", modifier = Modifier.padding(32.dp))
                     }
                     Button(onClick = { showImageDialog = false }, modifier = Modifier.padding(16.dp)) {

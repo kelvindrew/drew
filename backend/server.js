@@ -58,7 +58,8 @@ async function placeBetWithPlaywright(betData) {
         const platformUrl = betData.platform === 'betika' ? 'https://www.betika.cd' : 'https://www.betpawa.cd';
 
         console.log(`Navigating to ${platformUrl}`);
-        await page.goto(platformUrl, { waitUntil: 'networkidle' });
+        // Changed waitUntil to 'domcontentloaded' to avoid strict 30s timeout on heavy sites
+        await page.goto(platformUrl, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
         console.log('Attempting login...');
         if (betData.platform === 'betika') {
