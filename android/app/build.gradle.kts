@@ -29,6 +29,7 @@ android {
 
         buildConfigField("String", "API_FOOTBALL_KEY", "\"${localProperties.getProperty("API_FOOTBALL_KEY", "")}\"")
         buildConfigField("String", "THE_ODDS_KEY", "\"${localProperties.getProperty("THE_ODDS_KEY", "")}\"")
+        buildConfigField("String", "BACKEND_SECRET_TOKEN", "\"${localProperties.getProperty("BACKEND_SECRET_TOKEN", "betpro-secret-token-1234")}\"")
     }
 
     buildTypes {

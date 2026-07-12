@@ -116,7 +116,7 @@ class AutomationWorker @AssistedInject constructor(
             connection.requestMethod = "POST"
             connection.setRequestProperty("Content-Type", "application/json")
             // Send the secret token configured in backend/.env
-            connection.setRequestProperty("Authorization", "Bearer betpro-secret-token-1234")
+            connection.setRequestProperty("Authorization", "Bearer ${com.betpro.android.BuildConfig.BACKEND_SECRET_TOKEN}")
             connection.doOutput = true
 
             val jsonPayload = """

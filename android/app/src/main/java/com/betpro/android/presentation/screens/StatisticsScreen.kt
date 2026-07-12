@@ -14,6 +14,14 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.foundation.Image
+import android.graphics.BitmapFactory
+import android.util.Base64
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,6 +32,9 @@ fun StatisticsScreen(
     viewModel: StatisticsViewModel = hiltViewModel()
 ) {
     val betHistory by viewModel.betHistory.collectAsState()
+
+    var showImageDialog by remember { mutableStateOf(false) }
+    var selectedBase64Image by remember { mutableStateOf<String?>(null) }
 
     // Mock History Data: simulating capital progression over bets (would come from DB too)
     val capitalHistory = listOf(1000f, 990f, 970f, 1010f, 1000f, 1020f, 1010f, 1050f, 1040f, 1080f, 1250f)
@@ -66,11 +77,49 @@ fun StatisticsScreen(
                             }
                             if (!bet.screenshotBase64.isNullOrEmpty()) {
                                 Spacer(modifier = Modifier.height(8.dp))
-                                Button(onClick = { /* Open full screen image using Base64 */ }, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), contentColor = MaterialTheme.colorScheme.primary)) {
+                                Button(
+                                    onClick = {
+                                        selectedBase64Image = bet.screenshotBase64
+                                        showImageDialog = true
+                                    },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f), contentColor = MaterialTheme.colorScheme.primary)
+                                ) {
                                     Text("📸 Voir la preuve visuelle")
                                 }
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    if (showImageDialog && selectedBase64Image != null) {
+        Dialog(onDismissRequest = { showImageDialog = false }) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+            ) {
+                Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally) {
+                    try {
+                        val imageBytes = Base64.decode(selectedBase64Image, Base64.DEFAULT)
+                        val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+                        if (bitmap != null) {
+                            Image(
+                                bitmap = bitmap.asImageBitmap(),
+                                contentDescription = "Preuve du Pari",
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 200.dp, max = 500.dp),
+                                contentScale = androidx.compose.ui.layout.ContentScale.Fit
+                            )
+                        } else {
+                            Text("Image corrompue", modifier = Modifier.padding(32.dp))
+                        }
+                    } catch (e: Exception) {
+                        Text("Erreur lors du chargement de l'image", modifier = Modifier.padding(32.dp))
+                    }
+                    Button(onClick = { showImageDialog = false }, modifier = Modifier.padding(16.dp)) {
+                        Text("Fermer")
                     }
                 }
             }

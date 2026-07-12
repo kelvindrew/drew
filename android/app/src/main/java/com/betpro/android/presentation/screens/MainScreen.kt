@@ -94,6 +94,11 @@ fun MainScreen(settingsViewModel: SettingsViewModel = hiltViewModel()) {
                         }
                     }
                 }
+                1 -> {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text("Aucun match en direct correspondant à la stratégie.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
                 2 -> {
                     StatisticsScreen()
                 }
