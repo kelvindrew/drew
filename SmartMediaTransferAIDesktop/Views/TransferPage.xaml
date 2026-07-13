@@ -11,39 +11,28 @@
       Foreground="White">
 
     <Grid>
-        <!-- Background Gradient Simulation -->
-        <Border>
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#0F111A" Offset="0"/>
-                    <GradientStop Color="#1a142c" Offset="1"/>
-                </LinearGradientBrush>
-            </Border.Background>
-        </Border>
-
+        <!-- État A : En attente -->
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
 
-            <!-- Isometric/3D representation (Lottie Animation Host) -->
             <Grid Margin="0,0,0,48" Width="400" Height="200">
-                <!-- Fallback Icons if Lottie fails -->
-                <ui:SymbolIcon Symbol="Phone24" FontSize="80" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#A0A0A0"/>
+                <ui:SymbolIcon Symbol="Phone24" FontSize="80" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#8C90A6" Opacity="0.5"/>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <ui:SymbolIcon Symbol="ArrowRight24" FontSize="32" Foreground="{StaticResource PrimaryBrush}" Margin="8"/>
-                    <ui:SymbolIcon Symbol="ArrowRight24" FontSize="32" Foreground="{StaticResource SecondaryBrush}" Margin="8"/>
-                    <ui:SymbolIcon Symbol="ArrowRight24" FontSize="32" Foreground="#06B6D4" Margin="8"/>
+                    <ui:ProgressRing IsIndeterminate="True" Width="48" Height="48" Foreground="#0077FF" />
                 </StackPanel>
 
-                <ui:SymbolIcon Symbol="Desktop24" FontSize="100" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="White"/>
+                <ui:SymbolIcon Symbol="Desktop24" FontSize="100" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="#FFFFFF"/>
 
-                <!-- SkiaSharp Lottie Element (Transparent overlay) -->
                 <skia:SKElement x:Name="LottiePlayer" PaintSurface="LottiePlayer_PaintSurface" IgnorePixelScaling="True" />
             </Grid>
 
-            <TextBlock Text="Waiting for connection..." FontSize="28" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,0,0,16"/>
-            <TextBlock Text="Scan the QR code from the Android app to begin." FontSize="16" Foreground="#A0A0A0" HorizontalAlignment="Center" Margin="0,0,0,32"/>
+            <TextBlock Text="En attente de connexion..." FontSize="28" FontWeight="SemiBold" HorizontalAlignment="Center" Foreground="#FFFFFF" Margin="0,0,0,16"/>
+            <TextBlock Text="Scannez ce QR Code avec Smart Media Transfer sur votre mobile." FontSize="16" Foreground="#8C90A6" HorizontalAlignment="Center" Margin="0,0,0,32"/>
 
-            <ui:ProgressRing IsIndeterminate="True" Width="48" Height="48" Foreground="{StaticResource PrimaryBrush}" />
+            <!-- Fake QR Code Placeholder -->
+            <Border Width="150" Height="150" Background="#FFFFFF" HorizontalAlignment="Center" CornerRadius="8" Padding="8">
+                <ui:SymbolIcon Symbol="QrCode24" FontSize="100" Foreground="#0F111A" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
         </StackPanel>
     </Grid>
 </Page>

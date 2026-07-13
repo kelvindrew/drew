@@ -19,8 +19,8 @@
 
             <!-- Header -->
             <StackPanel Grid.Row="0" Margin="0,0,0,24">
-                <TextBlock Text="Welcome back," FontSize="18" Foreground="#A0A0A0" />
-                <TextBlock Text="Overview" FontSize="36" FontWeight="Bold" />
+                <TextBlock Text="Welcome back," FontSize="18" Foreground="#8C90A6" />
+                <TextBlock Text="Dashboard" FontSize="36" FontWeight="Bold" Foreground="#FFFFFF" />
             </StackPanel>
 
             <!-- Top Cards -->
@@ -33,33 +33,37 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <!-- Storage Card -->
-                <ui:Card Grid.Column="0" Padding="24">
+                <!-- Storage Jauges Circulaires (Placeholder for Lottie) -->
+                <ui:Card Grid.Column="0" Padding="24" Background="#0F111A" BorderBrush="#26FFFFFF" BorderThickness="1">
                     <StackPanel>
-                        <ui:SymbolIcon Symbol="Database24" FontSize="28" Foreground="{StaticResource PrimaryBrush}" HorizontalAlignment="Left" Margin="0,0,0,16"/>
-                        <TextBlock Text="Storage Used" FontSize="16" Foreground="#A0A0A0" Margin="0,0,0,8" />
-                        <TextBlock Text="{Binding TotalStorageUsed}" FontSize="28" FontWeight="SemiBold" />
-                        <ProgressBar Value="{Binding StorageProgress}" Height="4" Margin="0,16,0,0" Foreground="{StaticResource PrimaryBrush}" />
+                        <ui:SymbolIcon Symbol="Database24" FontSize="28" Foreground="#0077FF" HorizontalAlignment="Left" Margin="0,0,0,16"/>
+                        <TextBlock Text="Capacité Globale" FontSize="16" Foreground="#8C90A6" Margin="0,0,0,8" />
+                        <TextBlock Text="{Binding TotalStorageUsed}" FontSize="28" FontWeight="SemiBold" Foreground="#FFFFFF" />
+                        <ProgressBar Value="{Binding StorageProgress}" Height="4" Margin="0,16,0,0" Foreground="#0077FF" Background="#1E1E24" />
+                        <Grid Margin="0,4,0,0">
+                            <TextBlock Text="Utilisé" FontSize="12" HorizontalAlignment="Left" Foreground="#8C90A6"/>
+                            <TextBlock Text="Libre" FontSize="12" HorizontalAlignment="Right" Foreground="#8C90A6"/>
+                        </Grid>
                     </StackPanel>
                 </ui:Card>
 
                 <!-- Files Card -->
-                <ui:Card Grid.Column="2" Padding="24">
+                <ui:Card Grid.Column="2" Padding="24" Background="#0F111A" BorderBrush="#26FFFFFF" BorderThickness="1">
                     <StackPanel>
-                        <ui:SymbolIcon Symbol="Document24" FontSize="28" Foreground="{StaticResource SecondaryBrush}" HorizontalAlignment="Left" Margin="0,0,0,16"/>
-                        <TextBlock Text="Total Files" FontSize="16" Foreground="#A0A0A0" Margin="0,0,0,8" />
-                        <TextBlock Text="{Binding TotalFiles}" FontSize="28" FontWeight="SemiBold" />
-                        <TextBlock Text="+234 this week" FontSize="12" Foreground="{StaticResource SuccessBrush}" Margin="0,16,0,0" />
+                        <ui:SymbolIcon Symbol="Document24" FontSize="28" Foreground="#7F00FF" HorizontalAlignment="Left" Margin="0,0,0,16"/>
+                        <TextBlock Text="Fichiers Traités" FontSize="16" Foreground="#8C90A6" Margin="0,0,0,8" />
+                        <TextBlock Text="{Binding TotalFiles}" FontSize="28" FontWeight="SemiBold" Foreground="#FFFFFF" />
+                        <TextBlock Text="+234 ce mois" FontSize="12" Foreground="#00E676" Margin="0,16,0,0" />
                     </StackPanel>
                 </ui:Card>
 
                 <!-- Devices Card -->
-                <ui:Card Grid.Column="4" Padding="24">
+                <ui:Card Grid.Column="4" Padding="24" Background="#0F111A" BorderBrush="#26FFFFFF" BorderThickness="1">
                     <StackPanel>
-                        <ui:SymbolIcon Symbol="Phone24" FontSize="28" Foreground="#06B6D4" HorizontalAlignment="Left" Margin="0,0,0,16"/>
-                        <TextBlock Text="Trusted Devices" FontSize="16" Foreground="#A0A0A0" Margin="0,0,0,8" />
-                        <TextBlock Text="{Binding TrustedDevicesCount}" FontSize="28" FontWeight="SemiBold" />
-                        <TextBlock Text="All connected" FontSize="12" Foreground="{StaticResource SuccessBrush}" Margin="0,16,0,0" />
+                        <ui:SymbolIcon Symbol="Phone24" FontSize="28" Foreground="#00E5FF" HorizontalAlignment="Left" Margin="0,0,0,16"/>
+                        <TextBlock Text="Appareils Connectés" FontSize="16" Foreground="#8C90A6" Margin="0,0,0,8" />
+                        <TextBlock Text="{Binding TrustedDevicesCount}" FontSize="28" FontWeight="SemiBold" Foreground="#FFFFFF" />
+                        <TextBlock Text="1 transfert en attente" FontSize="12" Foreground="#FF9100" Margin="0,16,0,0" />
                     </StackPanel>
                 </ui:Card>
             </Grid>
@@ -72,20 +76,55 @@
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
 
-                <ui:Card Grid.Column="0" Padding="24">
+                <ui:Card Grid.Column="0" Padding="24" Background="#0F111A" BorderBrush="#26FFFFFF" BorderThickness="1">
                     <StackPanel>
-                        <TextBlock Text="Recent Transfers" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,16"/>
-                        <!-- Placeholder for List -->
-                        <TextBlock Text="No active transfers" Foreground="#808080" HorizontalAlignment="Center" Margin="0,48,0,0"/>
+                        <TextBlock Text="Derniers Transferts" FontSize="20" FontWeight="SemiBold" Foreground="#FFFFFF" Margin="0,0,0,16"/>
+                        <!-- Compact List -->
+                        <Grid Margin="0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ui:SymbolIcon Symbol="Image24" Foreground="#00E5FF" Margin="0,0,16,0" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Photo_Vacances.jpg" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                                <TextBlock Text="4.2 MB • Aujourd'hui à 14:32" FontSize="12" Foreground="#8C90A6"/>
+                            </StackPanel>
+                            <ui:SymbolIcon Grid.Column="2" Symbol="CheckmarkCircle24" Foreground="#00E676" VerticalAlignment="Center"/>
+                        </Grid>
+                        <Grid Margin="0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ui:SymbolIcon Symbol="Video24" Foreground="#7F00FF" Margin="0,0,16,0" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Inception_1080p.mkv" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                                <TextBlock Text="2.4 GB • Hier à 22:15" FontSize="12" Foreground="#8C90A6"/>
+                            </StackPanel>
+                            <ui:SymbolIcon Grid.Column="2" Symbol="CheckmarkCircle24" Foreground="#00E676" VerticalAlignment="Center"/>
+                        </Grid>
                     </StackPanel>
                 </ui:Card>
 
-                <ui:Card Grid.Column="2" Padding="24">
+                <ui:Card Grid.Column="2" Padding="24" Background="#1a122e" BorderBrush="#7F00FF" BorderThickness="1">
                     <StackPanel>
-                        <TextBlock Text="AI Suggestions" FontSize="20" FontWeight="SemiBold" Margin="0,0,0,16"/>
-                        <!-- Placeholder for AI -->
-                        <ui:SymbolIcon Symbol="Sparkle24" FontSize="48" Foreground="{StaticResource SecondaryBrush}" HorizontalAlignment="Center" Margin="0,32,0,16"/>
-                        <TextBlock Text="Your library is perfectly organized." Foreground="#A0A0A0" TextWrapping="Wrap" TextAlignment="Center" />
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <ui:SymbolIcon Symbol="Sparkle24" FontSize="24" Foreground="#7F00FF" Margin="0,0,8,0"/>
+                            <TextBlock Text="Suggestion IA" FontSize="20" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                        </StackPanel>
+                        <TextBlock Text="Vos disques sont pleins à 85%. Souhaitez-vous archiver automatiquement les fichiers > 1Go ?" Foreground="#FFFFFF" TextWrapping="Wrap" Margin="0,0,0,24" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <ui:Button Grid.Column="0" Content="Plus tard" HorizontalAlignment="Stretch" Foreground="#8C90A6" Background="Transparent"/>
+                            <ui:Button Grid.Column="2" Content="Archiver" HorizontalAlignment="Stretch" Appearance="Primary" Background="#0077FF" Foreground="White" BorderBrush="Transparent"/>
+                        </Grid>
                     </StackPanel>
                 </ui:Card>
             </Grid>
