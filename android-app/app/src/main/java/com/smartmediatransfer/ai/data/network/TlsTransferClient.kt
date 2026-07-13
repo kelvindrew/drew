@@ -33,6 +33,10 @@ class TlsTransferClient @Inject constructor(
             // 1. Perform JSON Handshake
             Log.d("TlsTransferClient", "Connected securely to PC at $host:$port")
 
+            // Handshake logic placeholder (Read/Write JSON length prefixed payload)
+            // val pending = transferDao.getPendingTransfersForDevice("PC_ID")
+            // Send SyncHandshakeRequest to Windows Server
+
             socket.close()
         } catch (e: Exception) {
             Log.e("TlsTransferClient", "Error connecting", e)
