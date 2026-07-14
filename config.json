@@ -1,0 +1,26 @@
+{
+  "api": {
+    "api_football_key": "YOUR_API_FOOTBALL_KEY",
+    "the_odds_api_key": "YOUR_THE_ODDS_API_KEY",
+    "update_frequency_seconds": 3600,
+    "max_retries": 3,
+    "network_delay": 1,
+    "timeout": 30
+  },
+  "database": {
+    "type": "sqlite",
+    "connection_string": "betpro_analyst.db"
+  },
+  "ai": {
+    "provider": "local",
+    "endpoint": "http://localhost:11434/api/generate",
+    "model": "llama3",
+    "temperature": 0.3
+  },
+  "app": {
+    "language": "fr",
+    "theme": "dark",
+    "log_level": "DEBUG",
+    "log_file": "logs/app.log"
+  }
+}

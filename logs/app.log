@@ -1,0 +1,30 @@
+2026-07-14 13:50:31 | INFO | [test_logger] Test INFO log
+2026-07-14 13:50:31 | WARNING | [test_logger] Test WARNING log
+2026-07-14 13:50:31 | ERROR | [test_logger] Test ERROR log
+2026-07-14 13:50:31 | DEBUG | [test_logger] Test DEBUG log
+2026-07-14 13:51:36 | INFO | [db_manager] Initializing database at betpro_analyst.db
+2026-07-14 13:51:36 | INFO | [db_manager] Database tables initialized successfully.
+2026-07-14 13:51:57 | INFO | [db_manager] Initializing database at betpro_analyst.db
+2026-07-14 13:51:57 | INFO | [db_manager] Database tables initialized successfully.
+2026-07-14 13:53:11 | INFO | [scraper] Playwright browser started.
+2026-07-14 13:58:10 | INFO | [main] Starting BETPRO Analyst application...
+2026-07-14 13:58:10 | INFO | [main] GUI loaded successfully.
+2026-07-14 13:59:37 | INFO | [db_manager] Initializing database at betpro_analyst.db
+2026-07-14 13:59:37 | INFO | [db_manager] Database tables initialized successfully.
+2026-07-14 14:38:10 | INFO | [db_manager] Initializing SQLAlchemy DB at betpro_analyst.db
+2026-07-14 14:38:10 | INFO | [db_manager] Database schemas created/verified successfully via SQLAlchemy.
+2026-07-14 14:44:35 | INFO | [main] Starting BETPRO Analyst application...
+2026-07-14 14:45:23 | INFO | [main] Starting BETPRO Analyst application...
+2026-07-14 14:45:24 | INFO | [main] GUI loaded successfully.
+2026-07-14 15:57:09 | INFO | [db_manager] Initializing SQLAlchemy DB at betpro_analyst.db
+2026-07-14 15:57:09 | INFO | [db_manager] Database schemas created/verified successfully via SQLAlchemy.
+2026-07-14 15:57:09 | INFO | [controller] Background scheduler started (interval: 3600s)
+2026-07-14 15:58:11 | INFO | [main] Starting BETPRO Analyst application...
+2026-07-14 15:58:12 | INFO | [main] GUI loaded successfully.
+2026-07-14 15:59:30 | INFO | [db_manager] Initializing SQLAlchemy DB at betpro_analyst.db
+2026-07-14 15:59:30 | INFO | [db_manager] Database schemas created/verified successfully via SQLAlchemy.
+2026-07-14 18:34:19 | INFO | [db_manager] Initializing SQLAlchemy DB at betpro_analyst.db
+2026-07-14 18:34:19 | INFO | [db_manager] Database schemas created/verified successfully via SQLAlchemy.
+2026-07-14 18:44:48 | INFO | [main] Starting BETPRO Analyst application...
+2026-07-14 20:25:01 | INFO | [db_manager] Initializing SQLAlchemy DB at betpro_analyst.db
+2026-07-14 20:25:01 | INFO | [db_manager] Database schemas created/verified successfully via SQLAlchemy.
