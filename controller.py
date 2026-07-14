@@ -59,3 +59,45 @@ class AppController(QObject):
     def generate_ai_report(self, match_id):
         logger.info(f"Generating report for match {match_id}")
         self.report_generated.emit("Rapport IA: Paris SG semble avoir l'avantage.")
+
+    @Slot(str)
+    def ask_ai_chat(self, prompt):
+        logger.info(f"Chat IA request: {prompt}")
+        import threading
+        import asyncio
+
+        def run_ai():
+            try:
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                # Call real AI
+                response = loop.run_until_complete(self.ai.generate_report({"user_question": prompt}))
+                self.report_generated.emit(response)
+                loop.close()
+            except Exception as e:
+                logger.error(f"AI Chat error: {e}")
+                self.report_generated.emit("Erreur lors de la communication avec l'IA.")
+
+        threading.Thread(target=run_ai, daemon=True).start()
+
+    def place_automated_bet(self, match_id, selection, odds, amount):
+        logger.info("Controller delegating bet to Node.js backend...")
+        import threading
+        import asyncio
+        from api.betting_bot import BettingBotClient
+
+        def run_bot():
+            try:
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                bot = BettingBotClient()
+                res = loop.run_until_complete(bot.place_bet(match_id, selection, odds, amount))
+                loop.close()
+                if res.get("success"):
+                    logger.info("Bet placed successfully via Node.js bot")
+                else:
+                    logger.error("Node.js bot rejected the bet")
+            except Exception as e:
+                logger.error(f"Failed to run bot client: {e}")
+
+        threading.Thread(target=run_bot, daemon=True).start()

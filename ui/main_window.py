@@ -23,7 +23,8 @@ class WorkerThread(QThread):
         self.finished.emit("Data loaded successfully!")
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, controller=None):
+        self.controller = controller
         super().__init__()
         self.setWindowTitle("BETPRO Analyst - Windows Desktop")
         self.resize(1200, 800)
@@ -123,7 +124,7 @@ class MainWindow(QMainWindow):
 
         refresh_btn = QPushButton("Actualiser les données")
         refresh_btn.setFixedWidth(200)
-        refresh_btn.clicked.connect(self.refresh_data)
+        refresh_btn.clicked.connect(self.controller.refresh_data if self.controller else self.refresh_data)
         layout.addWidget(refresh_btn)
 
         layout.addStretch()
@@ -355,3 +356,13 @@ class MainWindow(QMainWindow):
             QMessageBox.information(self, "Succès", "Paramètres sauvegardés avec succès !")
         except Exception as e:
             QMessageBox.critical(self, "Erreur", f"Impossible de sauvegarder: {e}")
+
+    def trigger_betting_bot(self):
+        if not hasattr(self, 'controller') or not self.controller:
+            QMessageBox.warning(self, "Erreur", "Le contrôleur n'est pas connecté.")
+            return
+
+        reply = QMessageBox.question(self, "Confirmer", "Voulez-vous vraiment lancer l'automatisation via le Bot Node.js ?", QMessageBox.Yes | QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            self.controller.place_automated_bet(12345, "Home Win", 1.95, 50)
+            self.send_notification("Bot Activé", "Ordre envoyé au backend Node.js.")
