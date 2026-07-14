@@ -1,11 +1,13 @@
-from PySide6.QtCore import QObject, Signal, Slot
+from PySide6.QtCore import QObject, Signal, Slot, QTimer
+import json
 from analysis.engine import StatsEngine
 from database.queries import MatchQueries, TeamQueries
+from api.api_football import APIFootballClient
+from api.the_odds import TheOddsClient
 from ai.assistant import LocalAIAssistant
 from utils.logger import logger
 
 class AppController(QObject):
-    # Signals to communicate with UI
     data_updated = Signal(dict)
     report_generated = Signal(str)
     error_occurred = Signal(str)
@@ -14,6 +16,23 @@ class AppController(QObject):
         super().__init__()
         self.stats_engine = StatsEngine()
         self.ai = LocalAIAssistant()
+        self.football_api = APIFootballClient()
+        self.odds_api = TheOddsClient()
+
+        # Scheduler
+        try:
+            with open("config.json", "r") as f:
+                self.config = json.load(f)
+            freq = self.config.get("api", {}).get("update_frequency_seconds", 3600)
+        except:
+            freq = 3600
+
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.refresh_data)
+        self.timer.start(freq * 1000) # milliseconds
+        logger.info(f"Background scheduler started (interval: {freq}s)")
+
+
 
     @Slot(int)
     def generate_ai_report(self, match_id):

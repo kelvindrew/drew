@@ -16,3 +16,10 @@
 2026-07-14 14:44:35 | INFO | [main] Starting BETPRO Analyst application...
 2026-07-14 14:45:23 | INFO | [main] Starting BETPRO Analyst application...
 2026-07-14 14:45:24 | INFO | [main] GUI loaded successfully.
+2026-07-14 15:57:09 | INFO | [db_manager] Initializing SQLAlchemy DB at betpro_analyst.db
+2026-07-14 15:57:09 | INFO | [db_manager] Database schemas created/verified successfully via SQLAlchemy.
+2026-07-14 15:57:09 | INFO | [controller] Background scheduler started (interval: 3600s)
+2026-07-14 15:58:11 | INFO | [main] Starting BETPRO Analyst application...
+2026-07-14 15:58:12 | INFO | [main] GUI loaded successfully.
+2026-07-14 15:59:30 | INFO | [db_manager] Initializing SQLAlchemy DB at betpro_analyst.db
+2026-07-14 15:59:30 | INFO | [db_manager] Database schemas created/verified successfully via SQLAlchemy.

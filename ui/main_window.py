@@ -1,15 +1,15 @@
 import sys
 import json
-from PySide6.QtWidgets import ( QSystemTrayIcon, QMenu, QStyle,
+from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QPushButton, QStackedWidget, QListWidget, QFrame,
-    QProgressBar, QTabWidget, QTextEdit
+    QProgressBar, QTabWidget, QTextEdit, QTableWidget, QTableWidgetItem,
+    QCalendarWidget, QHeaderView, QSystemTrayIcon, QMenu, QStyle,
+    QLineEdit, QFormLayout, QMessageBox
 )
 from PySide6.QtCore import Qt, QThread, Signal
 from PySide6.QtGui import QFont, QIcon
-
 from utils.logger import logger
-
 class WorkerThread(QThread):
     finished = Signal(str)
     progress = Signal(int)
@@ -245,3 +245,113 @@ class MainWindow(QMainWindow):
 
     def load_mock_chart(self):
         self.chart.plot_form(['J-4', 'J-3', 'J-2', 'J-1', 'Aujourdhui'], [40, 50, 70, 85, 90])
+
+    def create_calendar_page(self):
+        page = QWidget()
+        layout = QVBoxLayout(page)
+        layout.setContentsMargins(30, 30, 30, 30)
+
+        title = QLabel("Calendrier des Matchs")
+        title.setFont(QFont("Segoe UI", 24, QFont.Bold))
+        layout.addWidget(title)
+
+        self.calendar = QCalendarWidget()
+        self.calendar.setStyleSheet("QCalendarWidget { background-color: #1E1E1E; color: white; }")
+        self.calendar.selectionChanged.connect(self.on_date_selected)
+        layout.addWidget(self.calendar)
+
+        self.matches_list = QListWidget()
+        self.matches_list.setStyleSheet("background-color: #1E1E1E; color: white; border: 1px solid #333;")
+        layout.addWidget(self.matches_list)
+
+        return page
+
+    def on_date_selected(self):
+        date = self.calendar.selectedDate().toString("yyyy-MM-dd")
+        self.matches_list.clear()
+        self.matches_list.addItem(f"Chargement des matchs pour le {date}...")
+
+    def create_history_page(self):
+        page = QWidget()
+        layout = QVBoxLayout(page)
+        layout.setContentsMargins(30, 30, 30, 30)
+
+        title = QLabel("Historique des Analyses")
+        title.setFont(QFont("Segoe UI", 24, QFont.Bold))
+        layout.addWidget(title)
+
+        self.history_table = QTableWidget, QLineEdit, QFormLayout, QMessageBox(5, 4)
+        self.history_table.setHorizontalHeaderLabels(["Date", "Match", "Score", "Confiance IA"])
+        self.history_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.history_table.setStyleSheet("QTableWidget, QLineEdit, QFormLayout, QMessageBox { background-color: #1E1E1E; color: white; gridline-color: #333; } QHeaderView::section { background-color: #2A2A2A; color: #00E676; font-weight: bold; }")
+
+        # Populate mock data
+        self.history_table.setItem(0, 0, QTableWidget, QLineEdit, QFormLayout, QMessageBoxItem("2024-05-10"))
+        self.history_table.setItem(0, 1, QTableWidget, QLineEdit, QFormLayout, QMessageBoxItem("Paris SG vs Marseille"))
+        self.history_table.setItem(0, 2, QTableWidget, QLineEdit, QFormLayout, QMessageBoxItem("2 - 1"))
+        self.history_table.setItem(0, 3, QTableWidget, QLineEdit, QFormLayout, QMessageBoxItem("85%"))
+
+        layout.addWidget(self.history_table)
+
+        return page
+
+    def create_settings_page(self):
+        page = QWidget()
+        layout = QVBoxLayout(page)
+        layout.setContentsMargins(30, 30, 30, 30)
+
+        title = QLabel("Paramètres")
+        title.setFont(QFont("Segoe UI", 24, QFont.Bold))
+        layout.addWidget(title)
+
+        form_layout = QFormLayout()
+        form_layout.setLabelAlignment(Qt.AlignRight)
+
+        # We load actual values from config.json
+        import json
+        try:
+            with open("config.json", "r") as f:
+                self.config_data = json.load(f)
+        except:
+            self.config_data = {"api": {}, "ai": {}, "app": {}}
+
+        self.api_football_input = QLineEdit(self.config_data.get("api", {}).get("api_football_key", ""))
+        self.the_odds_input = QLineEdit(self.config_data.get("api", {}).get("the_odds_api_key", ""))
+        self.ai_endpoint_input = QLineEdit(self.config_data.get("ai", {}).get("endpoint", ""))
+        self.ai_model_input = QLineEdit(self.config_data.get("ai", {}).get("model", ""))
+
+        for w in [self.api_football_input, self.the_odds_input, self.ai_endpoint_input, self.ai_model_input]:
+            w.setStyleSheet("background-color: #2A2A2A; color: white; border: 1px solid #444; padding: 5px;")
+            w.setEchoMode(QLineEdit.Password) # Mask keys visually
+
+        # Model endpoint shouldn't be masked
+        self.ai_endpoint_input.setEchoMode(QLineEdit.Normal)
+        self.ai_model_input.setEchoMode(QLineEdit.Normal)
+
+        form_layout.addRow(QLabel("API-Football Key:"), self.api_football_input)
+        form_layout.addRow(QLabel("The-Odds API Key:"), self.the_odds_input)
+        form_layout.addRow(QLabel("Ollama API Endpoint:"), self.ai_endpoint_input)
+        form_layout.addRow(QLabel("Modèle IA (Local):"), self.ai_model_input)
+
+        layout.addLayout(form_layout)
+
+        save_btn = QPushButton("Sauvegarder")
+        save_btn.clicked.connect(self.save_settings)
+        layout.addWidget(save_btn, alignment=Qt.AlignRight)
+
+        layout.addStretch()
+        return page
+
+    def save_settings(self):
+        import json
+        self.config_data["api"]["api_football_key"] = self.api_football_input.text()
+        self.config_data["api"]["the_odds_api_key"] = self.the_odds_input.text()
+        self.config_data["ai"]["endpoint"] = self.ai_endpoint_input.text()
+        self.config_data["ai"]["model"] = self.ai_model_input.text()
+
+        try:
+            with open("config.json", "w") as f:
+                json.dump(self.config_data, f, indent=4)
+            QMessageBox.information(self, "Succès", "Paramètres sauvegardés avec succès !")
+        except Exception as e:
+            QMessageBox.critical(self, "Erreur", f"Impossible de sauvegarder: {e}")
