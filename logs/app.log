@@ -1,0 +1,13 @@
+2026-07-14 13:50:31 | INFO | [test_logger] Test INFO log
+2026-07-14 13:50:31 | WARNING | [test_logger] Test WARNING log
+2026-07-14 13:50:31 | ERROR | [test_logger] Test ERROR log
+2026-07-14 13:50:31 | DEBUG | [test_logger] Test DEBUG log
+2026-07-14 13:51:36 | INFO | [db_manager] Initializing database at betpro_analyst.db
+2026-07-14 13:51:36 | INFO | [db_manager] Database tables initialized successfully.
+2026-07-14 13:51:57 | INFO | [db_manager] Initializing database at betpro_analyst.db
+2026-07-14 13:51:57 | INFO | [db_manager] Database tables initialized successfully.
+2026-07-14 13:53:11 | INFO | [scraper] Playwright browser started.
+2026-07-14 13:58:10 | INFO | [main] Starting BETPRO Analyst application...
+2026-07-14 13:58:10 | INFO | [main] GUI loaded successfully.
+2026-07-14 13:59:37 | INFO | [db_manager] Initializing database at betpro_analyst.db
+2026-07-14 13:59:37 | INFO | [db_manager] Database tables initialized successfully.
