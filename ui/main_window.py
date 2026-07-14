@@ -1,12 +1,12 @@
 import sys
 import json
-from PySide6.QtWidgets import (
+from PySide6.QtWidgets import ( QSystemTrayIcon, QMenu, QStyle,
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QPushButton, QStackedWidget, QListWidget, QFrame,
     QProgressBar, QTabWidget, QTextEdit
 )
 from PySide6.QtCore import Qt, QThread, Signal
-from PySide6.QtGui import QFont
+from PySide6.QtGui import QFont, QIcon
 
 from utils.logger import logger
 
@@ -60,7 +60,7 @@ class MainWindow(QMainWindow):
         # Create Pages
         self.page_dashboard = self.create_dashboard_page()
         self.page_calendar = QLabel("Calendrier (Work In Progress)")
-        self.page_stats = QLabel("Statistiques (Work In Progress)")
+        self.page_stats = self.create_stats_page()
         self.page_reports = self.create_reports_page()
         self.page_history = QLabel("Historique (Work In Progress)")
         self.page_settings = QLabel("Paramètres (Work In Progress)")
@@ -75,7 +75,35 @@ class MainWindow(QMainWindow):
         main_layout.addWidget(self.sidebar)
         main_layout.addWidget(self.content_area)
 
+        main_layout.addWidget(self.content_area)
+
         self.nav_list.setCurrentRow(0)
+
+        # Setup System Tray
+        self.setup_tray()
+
+    def setup_tray(self):
+        self.tray_icon = QSystemTrayIcon(self)
+        self.tray_icon.setIcon(self.style().standardIcon(QStyle.SP_ComputerIcon))
+
+        tray_menu = QMenu()
+        show_action = tray_menu.addAction("Afficher BETPRO")
+        show_action.triggered.connect(self.show)
+
+        quit_action = tray_menu.addAction("Quitter")
+        quit_action.triggered.connect(QApplication.instance().quit)
+
+        self.tray_icon.setContextMenu(tray_menu)
+        self.tray_icon.show()
+
+    def send_notification(self, title, message):
+        self.tray_icon.showMessage(title, message, QSystemTrayIcon.Information, 3000)
+
+    def closeEvent(self, event):
+        # Minimize to tray instead of closing
+        event.ignore()
+        self.hide()
+        self.send_notification("BETPRO Analyst", "L'application continue de tourner en arrière-plan.")
 
     def create_dashboard_page(self):
         page = QWidget()
@@ -195,3 +223,25 @@ class MainWindow(QMainWindow):
         }
         """
         self.setStyleSheet(dark_stylesheet)
+
+    def create_stats_page(self):
+        from ui.chart_widget import MatplotlibWidget
+        page = QWidget()
+        layout = QVBoxLayout(page)
+        layout.setContentsMargins(30, 30, 30, 30)
+
+        title = QLabel("Statistiques Interactives")
+        title.setFont(QFont("Segoe UI", 24, QFont.Bold))
+        layout.addWidget(title)
+
+        self.chart = MatplotlibWidget(title="Forme récente")
+        layout.addWidget(self.chart)
+
+        btn = QPushButton("Charger les données du graphique")
+        btn.clicked.connect(self.load_mock_chart)
+        layout.addWidget(btn)
+
+        return page
+
+    def load_mock_chart(self):
+        self.chart.plot_form(['J-4', 'J-3', 'J-2', 'J-1', 'Aujourdhui'], [40, 50, 70, 85, 90])

@@ -11,3 +11,8 @@
 2026-07-14 13:58:10 | INFO | [main] GUI loaded successfully.
 2026-07-14 13:59:37 | INFO | [db_manager] Initializing database at betpro_analyst.db
 2026-07-14 13:59:37 | INFO | [db_manager] Database tables initialized successfully.
+2026-07-14 14:38:10 | INFO | [db_manager] Initializing SQLAlchemy DB at betpro_analyst.db
+2026-07-14 14:38:10 | INFO | [db_manager] Database schemas created/verified successfully via SQLAlchemy.
+2026-07-14 14:44:35 | INFO | [main] Starting BETPRO Analyst application...
+2026-07-14 14:45:23 | INFO | [main] Starting BETPRO Analyst application...
+2026-07-14 14:45:24 | INFO | [main] GUI loaded successfully.
