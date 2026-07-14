@@ -6,9 +6,6 @@ from utils.logger import logger
 def main():
     logger.info("Starting BETPRO Analyst application...")
 
-    # Enable High DPI support
-    # QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
-
     app = QApplication(sys.argv)
 
     # Modern Windows style

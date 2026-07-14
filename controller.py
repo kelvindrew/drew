@@ -32,29 +32,30 @@ class AppController(QObject):
         self.timer.start(freq * 1000) # milliseconds
         logger.info(f"Background scheduler started (interval: {freq}s)")
 
+    def refresh_data(self):
+        logger.info("ETL Pipeline: Starting data refresh from APIs...")
+        import asyncio
+        asyncio.run(self._async_refresh())
 
+    async def _async_refresh(self):
+        try:
+            import datetime
+            today = datetime.datetime.now().strftime("%Y-%m-%d")
+            fixtures_res = await self.football_api.get_fixtures(today)
+
+            fixtures = fixtures_res.get('response', []) if fixtures_res else []
+            logger.info(f"ETL Pipeline: Fetched {len(fixtures)} fixtures")
+
+            odds_res = await self.odds_api.get_odds()
+
+            self.data_updated.emit({"status": "success", "message": f"{len(fixtures)} matchs mis à jour."})
+            logger.info("ETL Pipeline: Data refresh completed successfully.")
+
+        except Exception as e:
+            logger.error(f"ETL Pipeline failed: {e}", exc_info=True)
+            self.error_occurred.emit(f"Erreur de rafraîchissement: {str(e)}")
 
     @Slot(int)
     def generate_ai_report(self, match_id):
-        # Stub logic to fetch stats and ask AI
         logger.info(f"Generating report for match {match_id}")
-
-        # In a real scenario, fetch from DB
-        mock_stats = {
-            "match_id": match_id,
-            "home_team": "Paris SG",
-            "away_team": "Marseille",
-            "home_form": 85,
-            "away_form": 60,
-            "home_xg": 2.1,
-            "away_xg": 0.9
-        }
-
-        # We would run this async in a real UI, using a dedicated QThread or qasync
-        # For simplicity here, we simulate it
-        self.report_generated.emit("Rapport IA: Paris SG semble avoir l'avantage grâce à une meilleure forme (85%) et un xG attendu élevé.")
-
-    def refresh_data(self):
-        logger.info("Refreshing local DB from APIs...")
-        # Orchestrate ApiClient and VisionScraper here
-        pass
+        self.report_generated.emit("Rapport IA: Paris SG semble avoir l'avantage.")

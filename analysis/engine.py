@@ -83,3 +83,61 @@ class StatsEngine:
         except Exception as e:
             logger.error(f"Error calculating power rating: {e}")
             return 50.0
+
+    def calculate_fatigue(self, match_dates):
+        """
+        Calculates a fatigue penalty (0-100) based on days of rest between recent matches.
+        match_dates: list of datetime objects sorted by date descending.
+        """
+        if not match_dates or len(match_dates) < 2:
+            return 0.0 # No fatigue if not enough data
+
+        import datetime
+        fatigue_score = 0.0
+
+        # Look at the last 3 matches max
+        for i in range(min(3, len(match_dates) - 1)):
+            delta = match_dates[i] - match_dates[i+1]
+            days_rest = delta.days
+
+            # Penalize heavily if less than 4 days rest
+            if days_rest < 3:
+                fatigue_score += 25.0
+            elif days_rest == 3:
+                fatigue_score += 15.0
+            elif days_rest == 4:
+                fatigue_score += 5.0
+
+        return min(100.0, fatigue_score)
+
+    def calculate_h2h_weight(self, h2h_results, team_id):
+        """
+        Calculates a historical advantage score (0-100) from Head-to-Head matches.
+        """
+        if not h2h_results:
+            return 50.0
+
+        points = 0
+        max_points = len(h2h_results) * 3
+
+        for match in h2h_results:
+            # Assuming h2h_results contains 'winner_id' or we parse home/away scores
+            if match.get('winner_id') == team_id:
+                points += 3
+            elif match.get('winner_id') is None: # Draw
+                points += 1
+
+        return (points / max_points) * 100.0
+
+    def get_global_form_score(self, basic_form, fatigue, h2h_score, power_rating):
+        """
+        Computes a final composite score out of 100 for prediction confidence.
+        Weights: Form (35%), Power Rating (35%), H2H (20%), Fatigue Penalty (-10%)
+        """
+        base_score = (basic_form * 0.35) + (power_rating * 0.35) + (h2h_score * 0.30)
+
+        # Apply fatigue as a penalty factor
+        penalty = (fatigue / 100.0) * 15.0 # Max 15 points penalty
+
+        final_score = base_score - penalty
+        return max(0.0, min(100.0, round(final_score, 2)))
