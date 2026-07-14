@@ -1,0 +1,14 @@
+{
+    "app_name": "Drew",
+    "theme": "dark",
+    "update_interval_hours": 1,
+    "max_events_per_combo": 3,
+    "min_events_per_combo": 2,
+    "database": {
+        "path": "drew_data.sqlite"
+    },
+    "api_keys": {
+        "odds_api": "",
+        "football_api": ""
+    }
+}
