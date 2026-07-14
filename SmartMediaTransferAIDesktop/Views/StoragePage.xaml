@@ -1,0 +1,107 @@
+<Page x:Class="SmartMediaTransferAIDesktop.Views.StoragePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      mc:Ignorable="d"
+      d:DesignHeight="800" d:DesignWidth="1000"
+      Title="StoragePage"
+      Foreground="White">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="32">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,24">
+                <TextBlock Text="Gestionnaire" FontSize="18" Foreground="#8C90A6" />
+                <TextBlock Text="Stockage &amp; Disques" FontSize="36" FontWeight="Bold" Foreground="#FFFFFF" />
+            </StackPanel>
+
+            <!-- Disks Grid -->
+            <Grid Grid.Row="1" Margin="0,0,0,32">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="24" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Disk 1 (SSD) -->
+                <ui:Card Grid.Column="0" Padding="24" Background="#0F111A" BorderBrush="#26FFFFFF" BorderThickness="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <ui:SymbolIcon Symbol="DriveSolid24" FontSize="48" Foreground="#0077FF" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="Local Disk (C:)" FontSize="20" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                            <TextBlock Text="Internal SSD • NTFS" FontSize="14" Foreground="#8C90A6" Margin="0,0,0,8" />
+                            <ProgressBar Value="85" Height="6" Margin="0,8,0,8" Foreground="#FF9100" Background="#1E1E24" />
+                            <Grid>
+                                <TextBlock Text="850 GB utilisé" FontSize="12" HorizontalAlignment="Left" Foreground="#8C90A6"/>
+                                <TextBlock Text="150 GB libre" FontSize="12" HorizontalAlignment="Right" Foreground="#8C90A6"/>
+                            </Grid>
+                            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                <ui:SymbolIcon Symbol="HeartPulse24" Foreground="#00E676" FontSize="12" Margin="0,0,4,0"/>
+                                <TextBlock Text="S.M.A.R.T: Bon état • 35°C" FontSize="12" Foreground="#00E676" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </ui:Card>
+
+                <!-- Disk 2 (USB) -->
+                <ui:Card Grid.Column="2" Padding="24" Background="#0F111A" BorderBrush="#26FFFFFF" BorderThickness="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <ui:SymbolIcon Symbol="UsbPort24" FontSize="48" Foreground="#7F00FF" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="Samsung T7 (D:)" FontSize="20" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                            <TextBlock Text="External SSD • exFAT" FontSize="14" Foreground="#8C90A6" Margin="0,0,0,8" />
+                            <ProgressBar Value="95" Height="6" Margin="0,8,0,8" Foreground="#FF1744" Background="#1E1E24" />
+                            <Grid>
+                                <TextBlock Text="1.9 TB utilisé" FontSize="12" HorizontalAlignment="Left" Foreground="#8C90A6"/>
+                                <TextBlock Text="100 GB libre" FontSize="12" HorizontalAlignment="Right" Foreground="#8C90A6"/>
+                            </Grid>
+                            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                <ui:SymbolIcon Symbol="HeartPulse24" Foreground="#FF9100" FontSize="12" Margin="0,0,4,0"/>
+                                <TextBlock Text="S.M.A.R.T: Attention • 52°C" FontSize="12" Foreground="#FF9100" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </ui:Card>
+            </Grid>
+
+            <!-- Archiving Queue -->
+            <ui:Card Grid.Row="2" Padding="24" Background="#0F111A" BorderBrush="#26FFFFFF" BorderThickness="1">
+                <StackPanel>
+                    <TextBlock Text="File d'attente d'Archivage (PC → Externe)" FontSize="20" FontWeight="SemiBold" Foreground="#FFFFFF" Margin="0,0,0,16"/>
+                    <ui:ListView Background="Transparent" BorderBrush="Transparent">
+                        <ui:ListView.Items>
+                            <Grid Margin="0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Vacation_Video_4K.mp4" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                                    <TextBlock Text="Déplacement vers Samsung T7 (D:)" FontSize="12" Foreground="#8C90A6"/>
+                                    <ProgressBar Value="45" Height="4" Margin="0,4,16,0" Foreground="#0077FF" Background="#1E1E24"/>
+                                </StackPanel>
+                                <TextBlock Grid.Column="1" Text="45% • 120 MB/s" VerticalAlignment="Center" Foreground="#8C90A6"/>
+                            </Grid>
+                        </ui:ListView.Items>
+                    </ui:ListView>
+                </StackPanel>
+            </ui:Card>
+        </Grid>
+    </ScrollViewer>
+</Page>

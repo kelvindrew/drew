@@ -1,0 +1,104 @@
+<Page x:Class="SmartMediaTransferAIDesktop.Views.IntelligencePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      mc:Ignorable="d"
+      d:DesignHeight="800" d:DesignWidth="1000"
+      Title="IntelligencePage"
+      Foreground="White">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="32">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,24">
+                <TextBlock Text="Intelligence &amp; Règles" FontSize="36" FontWeight="Bold" Foreground="#FFFFFF" />
+                <TextBlock Text="Le cerveau du système automatisé. Les règles sont définies en cascade." FontSize="16" Foreground="#8C90A6" Margin="0,8,0,0"/>
+            </StackPanel>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="24"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Rules List -->
+                <ui:Card Grid.Column="0" Padding="24" VerticalAlignment="Top" Background="#0F111A" BorderBrush="#26FFFFFF" BorderThickness="1">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,16">
+                            <TextBlock Text="Règles Actives" FontSize="20" FontWeight="SemiBold" Foreground="#FFFFFF" VerticalAlignment="Center"/>
+                            <ui:Button Content="Nouvelle Règle" Icon="{ui:SymbolIcon Symbol=Add24}" HorizontalAlignment="Right" Appearance="Primary" Background="#0077FF" Foreground="White" BorderBrush="Transparent" />
+                        </Grid>
+
+                        <ui:ListView Background="Transparent" BorderBrush="Transparent">
+                            <ui:ListView.Items>
+                                <!-- Rule 1 -->
+                                <ui:CardAction Margin="0,4" Padding="16" Background="#1E1E24" BorderBrush="Transparent">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="P1" FontWeight="Bold" Foreground="#0077FF" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Si [Extension .MP4] ET [Taille > 500Mo]" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                                            <TextBlock Text="ALORS [Déplacer vers Disque D:]" FontSize="12" Foreground="#8C90A6"/>
+                                        </StackPanel>
+                                        <ui:ToggleSwitch Grid.Column="2" IsChecked="True" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </ui:CardAction>
+
+                                <!-- Rule 2 -->
+                                <ui:CardAction Margin="0,4" Padding="16" Background="#1E1E24" BorderBrush="Transparent">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="P2" FontWeight="Bold" Foreground="#7F00FF" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="Si [Catégorie = Documents]" FontWeight="SemiBold" Foreground="#FFFFFF"/>
+                                            <TextBlock Text="ALORS [Garder sur Disque Local C:]" FontSize="12" Foreground="#8C90A6"/>
+                                        </StackPanel>
+                                        <ui:ToggleSwitch Grid.Column="2" IsChecked="True" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </ui:CardAction>
+                            </ui:ListView.Items>
+                        </ui:ListView>
+                    </StackPanel>
+                </ui:Card>
+
+                <!-- Mode Confirmation Panel (Overlay Mock) -->
+                <ui:Card Grid.Column="2" Padding="24" Background="#1a122e" BorderBrush="#7F00FF" BorderThickness="1" VerticalAlignment="Top">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <ui:SymbolIcon Symbol="Sparkle24" Foreground="#7F00FF" FontSize="24" Margin="0,0,8,0"/>
+                            <TextBlock Text="Suggestion IA" FontSize="20" FontWeight="SemiBold" Foreground="#7F00FF"/>
+                        </StackPanel>
+
+                        <TextBlock Text="L'IA suggère un déplacement basé sur vos habitudes." TextWrapping="Wrap" Foreground="#8C90A6" Margin="0,0,0,16"/>
+
+                        <TextBlock Text="Fichier détecté :" FontSize="12" Foreground="#8C90A6"/>
+                        <TextBlock Text="{Binding PendingConfirmationFileName}" FontWeight="SemiBold" Foreground="#FFFFFF" TextWrapping="Wrap" Margin="0,0,0,12"/>
+
+                        <TextBlock Text="Nouvel emplacement :" FontSize="12" Foreground="#8C90A6"/>
+                        <TextBlock Text="{Binding PendingConfirmationDestination}" FontWeight="SemiBold" Foreground="#00E676" TextWrapping="Wrap" Margin="0,0,0,24"/>
+
+                        <ui:Button Content="✅ Autoriser" HorizontalAlignment="Stretch" Background="#00E676" Foreground="White" BorderBrush="Transparent" Margin="0,0,0,8" />
+                        <ui:Button Content="❌ Refuser" HorizontalAlignment="Stretch" Background="#FF1744" Foreground="White" BorderBrush="Transparent" Margin="0,0,0,8"/>
+                        <ui:Button Content="✏ Modifier la règle" HorizontalAlignment="Stretch" Background="Transparent" Foreground="#8C90A6" BorderBrush="#8C90A6"/>
+                    </StackPanel>
+                </ui:Card>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</Page>
