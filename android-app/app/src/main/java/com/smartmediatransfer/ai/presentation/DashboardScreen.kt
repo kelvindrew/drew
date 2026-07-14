@@ -18,7 +18,11 @@ import com.smartmediatransfer.ai.presentation.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardScreen() {
+fun DashboardScreen(
+    onNavigateToScanner: () -> Unit,
+    onNavigateToTransfer: () -> Unit,
+    onNavigateToFileSelection: () -> Unit
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -35,8 +39,8 @@ fun DashboardScreen() {
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            // Main Action Card (Glassmorphism inspired)
             Card(
+                onClick = onNavigateToTransfer,
                 modifier = Modifier.fillMaxWidth().height(200.dp),
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
@@ -58,7 +62,7 @@ fun DashboardScreen() {
                     }
 
                     FloatingActionButton(
-                        onClick = { /* Launch Scanner */ },
+                        onClick = onNavigateToScanner,
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
                             .padding(16.dp),
@@ -70,10 +74,18 @@ fun DashboardScreen() {
             }
 
             Spacer(modifier = Modifier.height(24.dp))
-            Text("File d'attente", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("File d'attente", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                IconButton(onClick = onNavigateToFileSelection) {
+                    Icon(Icons.Default.Add, contentDescription = "Add Files", tint = ElectricBlue)
+                }
+            }
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Mock Transfer Item
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
