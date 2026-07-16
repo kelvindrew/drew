@@ -1,12 +1,15 @@
 import sys
 import json
+import os
 from PySide6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
                                QPushButton, QLabel, QLineEdit, QListWidget, QListWidgetItem,
-                               QMessageBox, QFrame, QScrollArea, QProgressBar)
+                               QMessageBox, QFrame, QScrollArea, QProgressBar, QSystemTrayIcon,
+                               QMenu, QTabWidget, QTableWidget, QTableWidgetItem, QHeaderView, QFileDialog)
 from PySide6.QtCore import Qt, QTimer, QThread, Signal
-from PySide6.QtGui import QFont, QColor, QPalette
+from PySide6.QtGui import QFont, QColor, QPalette, QIcon, QAction
 
 from drew.engine.coordinator import Coordinator
+from drew.utils.export import export_to_csv
 
 # Use neon green for accents
 NEON_GREEN = "#00E676"
@@ -28,8 +31,8 @@ class RefreshWorker(QThread):
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Drew - IA d'Analyse Sportive")
-        self.resize(1000, 700)
+        self.setWindowTitle("Drew - Analyse Sportive & Value")
+        self.resize(1200, 800)
 
         self.coordinator = Coordinator()
 
@@ -39,19 +42,49 @@ class MainWindow(QMainWindow):
 
         self.setup_ui()
         self.apply_theme()
+        self.setup_tray_icon()
 
-        # Setup auto refresh timer (1 hour)
+        # Setup auto refresh timer
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.start_refresh)
-        # Convert hours to ms
         interval_ms = self.config.get("update_interval_hours", 1) * 3600 * 1000
         self.timer.start(interval_ms)
 
         # Initial data load
         self.start_refresh()
 
+    def setup_tray_icon(self):
+        self.tray_icon = QSystemTrayIcon(self)
+        # Create a simple transparent/color icon if no real icon exists
+        icon = QIcon.fromTheme("applications-internet")
+        if icon.isNull():
+            from PySide6.QtGui import QPixmap
+            pixmap = QPixmap(32, 32)
+            pixmap.fill(QColor(NEON_GREEN))
+            icon = QIcon(pixmap)
+
+        self.tray_icon.setIcon(icon)
+        self.tray_icon.setToolTip("Drew - Analyse Sportive")
+
+        tray_menu = QMenu()
+        show_action = QAction("Ouvrir Drew", self)
+        show_action.triggered.connect(self.showNormal)
+
+        refresh_action = QAction("Actualiser", self)
+        refresh_action.triggered.connect(self.start_refresh)
+
+        quit_action = QAction("Quitter", self)
+        quit_action.triggered.connect(QApplication.instance().quit)
+
+        tray_menu.addAction(show_action)
+        tray_menu.addAction(refresh_action)
+        tray_menu.addSeparator()
+        tray_menu.addAction(quit_action)
+
+        self.tray_icon.setContextMenu(tray_menu)
+        self.tray_icon.show()
+
     def apply_theme(self):
-        # Dark Theme as specified in memory
         self.setStyleSheet(f"""
             QMainWindow, QWidget {{
                 background-color: {DARK_BG};
@@ -87,12 +120,33 @@ class MainWindow(QMainWindow):
                 background-color: {CARD_BG};
                 border-radius: 8px;
             }}
-            QScrollArea {{
-                border: none;
-                background-color: transparent;
+            QTabWidget::pane {{
+                border: 1px solid #333;
+                background-color: {DARK_BG};
             }}
-            QScrollArea > QWidget > QWidget {{
-                background-color: transparent;
+            QTabBar::tab {{
+                background-color: {CARD_BG};
+                color: #aaa;
+                padding: 10px 20px;
+                margin-right: 2px;
+                border-top-left-radius: 4px;
+                border-top-right-radius: 4px;
+            }}
+            QTabBar::tab:selected {{
+                background-color: {DARK_BG};
+                color: {NEON_GREEN};
+                border-bottom: 2px solid {NEON_GREEN};
+            }}
+            QTableWidget {{
+                background-color: {CARD_BG};
+                gridline-color: #333;
+                border: none;
+            }}
+            QHeaderView::section {{
+                background-color: #111;
+                color: white;
+                padding: 5px;
+                border: 1px solid #333;
             }}
         """)
 
@@ -108,49 +162,43 @@ class MainWindow(QMainWindow):
         sidebar_layout = QVBoxLayout(sidebar)
 
         title = QLabel("DREW")
-        title.setFont(QFont("Arial", 24, QFont.Bold))
-        title.setStyleSheet(f"color: {NEON_GREEN}; padding-bottom: 20px;")
+        title.setFont(QFont("Arial", 28, QFont.Bold))
+        title.setStyleSheet(f"color: {NEON_GREEN}; padding-bottom: 10px;")
         title.setAlignment(Qt.AlignCenter)
 
-        btn_dashboard = QPushButton("🏠 Tableau de bord")
-        btn_history = QPushButton("📊 Historique")
-        self.btn_refresh = QPushButton("🔄 Actualiser Manuellement")
+        subtitle = QLabel("AI Analytics")
+        subtitle.setFont(QFont("Arial", 10))
+        subtitle.setStyleSheet("color: #888; padding-bottom: 20px;")
+        subtitle.setAlignment(Qt.AlignCenter)
+
+        self.btn_refresh = QPushButton("🔄 Rafraîchir API")
         self.btn_refresh.clicked.connect(self.start_refresh)
 
+        btn_export = QPushButton("📤 Exporter CSV")
+        btn_export.clicked.connect(self.export_data)
+
         sidebar_layout.addWidget(title)
-        sidebar_layout.addWidget(btn_dashboard)
-        sidebar_layout.addWidget(btn_history)
-        sidebar_layout.addStretch()
+        sidebar_layout.addWidget(subtitle)
         sidebar_layout.addWidget(self.btn_refresh)
+        sidebar_layout.addWidget(btn_export)
+        sidebar_layout.addStretch()
 
         main_layout.addWidget(sidebar)
 
-        # Main Content
-        content = QWidget()
-        content_layout = QVBoxLayout(content)
+        # Main Content area (Tabs)
+        content_layout = QVBoxLayout()
 
-        # Search area
-        search_frame = QFrame()
-        search_frame.setObjectName("Card")
-        search_layout = QHBoxLayout(search_frame)
+        self.tabs = QTabWidget()
+        self.tab_combos = QWidget()
+        self.tab_value_bets = QWidget()
 
-        search_layout.addWidget(QLabel("Cote cible minimum :"))
-        self.input_min = QLineEdit("5.80")
-        self.input_min.setFixedWidth(80)
-        search_layout.addWidget(self.input_min)
+        self.setup_combo_tab()
+        self.setup_value_bets_tab()
 
-        search_layout.addWidget(QLabel("Maximum :"))
-        self.input_max = QLineEdit("6.20")
-        self.input_max.setFixedWidth(80)
-        search_layout.addWidget(self.input_max)
+        self.tabs.addTab(self.tab_combos, "🎯 Générateur de Combinaisons")
+        self.tabs.addTab(self.tab_value_bets, "💎 Value Bets & Alertes")
 
-        btn_search = QPushButton("🔍 Chercher Combinaisons")
-        btn_search.setObjectName("ActionBtn")
-        btn_search.clicked.connect(self.find_combinations)
-        search_layout.addWidget(btn_search)
-        search_layout.addStretch()
-
-        content_layout.addWidget(search_frame)
+        content_layout.addWidget(self.tabs)
 
         # Progress bar
         self.progress = QProgressBar()
@@ -158,6 +206,34 @@ class MainWindow(QMainWindow):
         self.progress.setFixedHeight(4)
         self.progress.hide()
         content_layout.addWidget(self.progress)
+
+        main_layout.addLayout(content_layout)
+
+    def setup_combo_tab(self):
+        layout = QVBoxLayout(self.tab_combos)
+
+        # Search area
+        search_frame = QFrame()
+        search_frame.setObjectName("Card")
+        search_layout = QHBoxLayout(search_frame)
+
+        search_layout.addWidget(QLabel("Cote cible : De"))
+        self.input_min = QLineEdit("5.00")
+        self.input_min.setFixedWidth(60)
+        search_layout.addWidget(self.input_min)
+
+        search_layout.addWidget(QLabel("à"))
+        self.input_max = QLineEdit("7.00")
+        self.input_max.setFixedWidth(60)
+        search_layout.addWidget(self.input_max)
+
+        btn_search = QPushButton("Rechercher la combinaison idéale")
+        btn_search.setObjectName("ActionBtn")
+        btn_search.clicked.connect(self.find_combinations)
+        search_layout.addWidget(btn_search)
+        search_layout.addStretch()
+
+        layout.addWidget(search_frame)
 
         # Results area
         self.results_area = QScrollArea()
@@ -167,13 +243,26 @@ class MainWindow(QMainWindow):
         self.results_layout.setAlignment(Qt.AlignTop)
         self.results_area.setWidget(self.results_widget)
 
-        content_layout.addWidget(self.results_area)
-        main_layout.addWidget(content)
+        layout.addWidget(self.results_area)
+
+    def setup_value_bets_tab(self):
+        layout = QVBoxLayout(self.tab_value_bets)
+
+        info_lbl = QLabel("Événements présentant un écart important (Value / EV+) entre la cote bookmaker et notre estimation.")
+        info_lbl.setStyleSheet("color: #888; margin-bottom: 10px;")
+        layout.addWidget(info_lbl)
+
+        self.table_value = QTableWidget(0, 6)
+        self.table_value.setHorizontalHeaderLabels(["Match", "Marché", "Cote Bookmaker", "Probabilité (Nous)", "Cote Implicite", "Expected Value (EV)"])
+        self.table_value.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+        self.table_value.setEditTriggers(QTableWidget.NoEditTriggers)
+
+        layout.addWidget(self.table_value)
 
     def start_refresh(self):
         self.btn_refresh.setEnabled(False)
         self.btn_refresh.setText("Actualisation...")
-        self.progress.setRange(0, 0) # Indeterminate
+        self.progress.setRange(0, 0)
         self.progress.show()
 
         self.worker = RefreshWorker(self.coordinator)
@@ -182,43 +271,75 @@ class MainWindow(QMainWindow):
 
     def end_refresh(self):
         self.btn_refresh.setEnabled(True)
-        self.btn_refresh.setText("🔄 Actualiser Manuellement")
+        self.btn_refresh.setText("🔄 Rafraîchir API")
         self.progress.hide()
-        QMessageBox.information(self, "Actualisation", "Les données ont été mises à jour avec succès.")
+
+        # Show Windows Notification
+        self.tray_icon.showMessage(
+            "Drew - Analyse Terminée",
+            "Les nouvelles données ont été analysées avec succès.",
+            QSystemTrayIcon.Information,
+            3000
+        )
+
+        self.populate_value_bets()
+
+    def populate_value_bets(self):
+        self.table_value.setRowCount(0)
+        # Fetch Top EV odds
+        value_bets = self.coordinator.get_value_bets()
+        for row, bet in enumerate(value_bets):
+            self.table_value.insertRow(row)
+            self.table_value.setItem(row, 0, QTableWidgetItem(f"{bet['home_team']} vs {bet['away_team']}"))
+            self.table_value.setItem(row, 1, QTableWidgetItem(bet['selection_name']))
+
+            price_item = QTableWidgetItem(str(bet['price']))
+            self.table_value.setItem(row, 2, price_item)
+
+            prob_item = QTableWidgetItem(f"{bet['true_probability']}%")
+            self.table_value.setItem(row, 3, prob_item)
+
+            implied_item = QTableWidgetItem(str(bet['implied_odds']))
+            self.table_value.setItem(row, 4, implied_item)
+
+            ev_val = bet['expected_value']
+            ev_item = QTableWidgetItem(f"{ev_val}%")
+            if ev_val > 5:
+                ev_item.setForeground(QColor(NEON_GREEN))
+            elif ev_val < 0:
+                ev_item.setForeground(QColor("#FF5252"))
+            self.table_value.setItem(row, 5, ev_item)
 
     def find_combinations(self):
         try:
             target_min = float(self.input_min.text())
             target_max = float(self.input_max.text())
         except ValueError:
-            QMessageBox.warning(self, "Erreur", "Veuillez entrer des valeurs numériques valides.")
+            QMessageBox.warning(self, "Erreur", "Veuillez entrer des cotes valides.")
             return
 
-        # Clear previous results
         for i in reversed(range(self.results_layout.count())):
             self.results_layout.itemAt(i).widget().setParent(None)
 
         combos = self.coordinator.get_combinations(target_min, target_max)
 
         if not combos:
-            lbl = QLabel("Aucune combinaison trouvée pour cette plage de cotes.")
+            lbl = QLabel("Aucune combinaison trouvée respectant nos critères de sécurité.")
             lbl.setAlignment(Qt.AlignCenter)
             self.results_layout.addWidget(lbl)
             return
 
         for i, combo in enumerate(combos):
-            card = self.create_combo_card(i+1, combo)
-            self.results_layout.addWidget(card)
+            self.results_layout.addWidget(self.create_combo_card(i+1, combo))
 
     def create_combo_card(self, index, combo):
         card = QFrame()
         card.setObjectName("Card")
         layout = QVBoxLayout(card)
 
-        # Header
         header_layout = QHBoxLayout()
-        title = QLabel(f"Combinaison {chr(64+index)}") # A, B, C...
-        title.setFont(QFont("Arial", 16, QFont.Bold))
+        title = QLabel(f"Ticket #{index} - Combo {len(combo['items'])} événements")
+        title.setFont(QFont("Arial", 14, QFont.Bold))
         title.setStyleSheet(f"color: {NEON_GREEN};")
 
         stats = QLabel(f"Cote Totale: <b>{combo['total_odds']}</b> | Confiance: <b>{combo['avg_confidence']}%</b>")
@@ -228,32 +349,33 @@ class MainWindow(QMainWindow):
         header_layout.addWidget(stats)
         layout.addLayout(header_layout)
 
-        # Items
         for odd in combo['items']:
             item_frame = QFrame()
-            item_frame.setStyleSheet("background-color: #252525; border-radius: 5px; padding: 5px;")
+            item_frame.setStyleSheet("background-color: #252525; border-radius: 4px; padding: 5px; margin-top: 5px;")
             item_layout = QHBoxLayout(item_frame)
 
-            match_lbl = QLabel(f"{odd['home_team']} vs {odd['away_team']}")
-            match_lbl.setFont(QFont("Arial", 11, QFont.Bold))
+            match_lbl = QLabel(f"⚽ {odd['home_team']} - {odd['away_team']}")
+            match_lbl.setFixedWidth(250)
 
-            selection_lbl = QLabel(f"{odd['selection_name']} @ {odd['price']}")
+            selection_lbl = QLabel(f"{odd['selection_name']}")
+            selection_lbl.setStyleSheet("color: #ccc;")
 
-            conf_lbl = QLabel(f"Score: {odd['confidence_score']}")
+            price_lbl = QLabel(f"@{odd['price']}")
+            price_lbl.setFont(QFont("Arial", 10, QFont.Bold))
+            price_lbl.setStyleSheet(f"color: {NEON_GREEN};")
 
             item_layout.addWidget(match_lbl)
-            item_layout.addStretch()
             item_layout.addWidget(selection_lbl)
-            item_layout.addWidget(conf_lbl)
+            item_layout.addStretch()
+            item_layout.addWidget(price_lbl)
 
             layout.addWidget(item_frame)
 
             if odd.get('risk_flags'):
                 try:
-                    import json
                     flags = json.loads(odd['risk_flags'])
                     if flags:
-                        flags_lbl = QLabel("⚠️ Risques: " + ", ".join(flags))
+                        flags_lbl = QLabel("⚠️ Alerte IA: " + ", ".join(flags))
                         flags_lbl.setStyleSheet("color: #FF5252; font-size: 10px;")
                         layout.addWidget(flags_lbl)
                 except:
@@ -261,8 +383,22 @@ class MainWindow(QMainWindow):
 
         return card
 
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    sys.exit(app.exec())
+    def export_data(self):
+        file_path, _ = QFileDialog.getSaveFileName(self, "Exporter les données", "", "CSV Files (*.csv)")
+        if file_path:
+            try:
+                export_to_csv(self.coordinator.db, file_path)
+                QMessageBox.information(self, "Export", "Données exportées avec succès.")
+            except Exception as e:
+                QMessageBox.critical(self, "Erreur", f"Erreur lors de l'exportation: {str(e)}")
+
+    def closeEvent(self, event):
+        # Instead of closing immediately, hide to system tray
+        event.ignore()
+        self.hide()
+        self.tray_icon.showMessage(
+            "Drew en arrière-plan",
+            "Le moteur d'analyse continue de tourner. Double-cliquez sur l'icône pour l'ouvrir.",
+            QSystemTrayIcon.Information,
+            2000
+        )
