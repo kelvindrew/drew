@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Soft Drop Shadow Under the House -->
+    <path
+        android:pathData="M30,76 L78,76 C78,81 74,84 70,84 L38,84 C34,84 30,81 30,76 Z"
+        android:fillColor="#33000000" />
+
+    <!-- Chimney -->
+    <path
+        android:pathData="M66,35 L74,35 L74,48 L66,42 Z"
+        android:fillColor="#A7F3D0" />
+    <path
+        android:pathData="M65,34 L75,34 L75,36 L65,36 Z"
+        android:fillColor="#10B981" />
+
+    <!-- House Main Body (Pure White) -->
+    <path
+        android:pathData="M32,48 L76,48 L76,75 C76,78.3 73.3,81 70,81 L38,81 C34.7,81 32,78.3 32,75 Z"
+        android:fillColor="#FFFFFF" />
+
+    <!-- Main Roof (Vibrant Mint Emerald) -->
+    <path
+        android:pathData="M54,23 L87,48 C87.8,48.6 88,49.8 87.4,50.6 C86.8,51.4 85.6,51.6 84.8,51 L54,27.5 L23.2,51 C22.4,51.6 21.2,51.4 20.6,50.6 C20,49.8 20.2,48.6 21,48 Z"
+        android:fillColor="#10B981" />
+
+    <!-- Front Door Archway (Deep Emerald) -->
+    <path
+        android:pathData="M48,81 L48,64 C48,60.7 50.7,58 54,58 C57.3,58 60,60.7 60,64 L60,81 Z"
+        android:fillColor="#064E3B" />
+
+    <!-- Door Handle (Mint) -->
+    <path
+        android:pathData="M51,71m-1.2,0a1.2,1.2 0,1,1 2.4,0a1.2,1.2 0,1,1 -2.4,0"
+        android:fillColor="#34D399" />
+
+    <!-- Leaf Accent -->
+    <path
+        android:pathData="M54,36 C57,36 59,39 58,43 C54,44 51,41 54,36 Z"
+        android:fillColor="#059669" />
+
+</vector>

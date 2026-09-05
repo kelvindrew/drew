@@ -1,0 +1,56 @@
+name: kasa
+description: Notre maison, notre budget. - Application de gestion de budget commun pour foyers.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  
+  # Firebase
+  firebase_core: ^3.8.1
+  firebase_auth: ^5.4.1
+  cloud_firestore: ^5.6.1
+  firebase_storage: ^12.4.1
+  firebase_messaging: ^15.2.1
+  
+  # State Management
+  flutter_riverpod: ^2.6.1
+  
+  # Navigation
+  go_router: ^14.8.1
+  
+  # UI
+  google_fonts: ^6.2.1
+  flutter_svg: ^2.0.16
+  flutter_animate: ^4.5.2
+  fl_chart: ^0.70.2
+  percent_indicator: ^4.2.3
+  cached_network_image: ^3.4.1
+  shimmer: ^3.0.0
+  
+  # Utils
+  intl: ^0.19.0
+  uuid: ^4.5.1
+  share_plus: ^10.1.4
+  image_picker: ^1.1.2
+  url_launcher: ^6.3.1
+  
+  # Local Storage
+  shared_preferences: ^2.3.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/animations/

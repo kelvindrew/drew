@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Soft Drop Shadow Under the House -->
+    <path
+        android:pathData="M30,76 L78,76 C78,81 74,84 70,84 L38,84 C34,84 30,81 30,76 Z"
+        android:fillColor="#33000000" />
+
+    <!-- Chimney -->
+    <path
+        android:pathData="M66,35 L74,35 L74,48 L66,42 Z"
+        android:fillColor="#D1FAE5" />
+    <path
+        android:pathData="M65,34 L75,34 L75,36 L65,36 Z"
+        android:fillColor="#FBBF24" />
+
+    <!-- House Main Body (Frosted White) -->
+    <path
+        android:pathData="M32,48 L76,48 L76,75 C76,78.3 73.3,81 70,81 L38,81 C34.7,81 32,78.3 32,75 Z"
+        android:fillColor="#FFFFFF" />
+
+    <!-- Main Roof (Warm Golden Amber Accent) -->
+    <path
+        android:pathData="M54,23 L87,48 C87.8,48.6 88,49.8 87.4,50.6 C86.8,51.4 85.6,51.6 84.8,51 L54,27.5 L23.2,51 C22.4,51.6 21.2,51.4 20.6,50.6 C20,49.8 20.2,48.6 21,48 Z"
+        android:fillColor="#F59E0B" />
+
+    <!-- Front Door Archway (Deep Forest) -->
+    <path
+        android:pathData="M48,81 L48,64 C48,60.7 50.7,58 54,58 C57.3,58 60,60.7 60,64 L60,81 Z"
+        android:fillColor="#064E3B" />
+
+    <!-- Door Handle (Gold) -->
+    <path
+        android:pathData="M51,71m-1.2,0a1.2,1.2 0,1,1 2.4,0a1.2,1.2 0,1,1 -2.4,0"
+        android:fillColor="#FBBF24" />
+
+    <!-- Attic Window / Shield Badge (Smart Household Emblem) -->
+    <path
+        android:pathData="M54,43m-5,0a5,5 0,1,1 10,0a5,5 0,1,1 -10,0"
+        android:fillColor="#047857" />
+    <path
+        android:pathData="M54,43m-3.5,0a3.5,3.5 0,1,1 7,0a3.5,3.5 0,1,1 -7,0"
+        android:fillColor="#34D399" />
+    <path
+        android:pathData="M54,40.5 L54,45.5 M51.5,43 L56.5,43"
+        android:strokeWidth="0.8"
+        android:strokeColor="#FFFFFF" />
+
+</vector>
