@@ -9,7 +9,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -31,7 +30,7 @@ import com.example.kasa.theme.tokens.KasaThemeDefinition
 
 /**
  * Carte adaptative qui adopte les formes, bordures, ombres et effets de relief
- * propres à chaque Design System (Kawaii, Japanese, Isometric, Futuristic, Luxury).
+ * propres à chaque Design System (Kawaii, Zen Japonais, Luxury).
  */
 @Composable
 fun ThemedCard(
@@ -45,8 +44,6 @@ fun ThemedCard(
     content: @Composable ColumnScope.() -> Unit
 ) {
     val theme = KasaTheme.definition
-    val isIsometric = theme.borders.is3dExtruded
-    val isFuturistic = theme.borders.isNeonGlow
     val isLuxury = theme.id == "LUXURY"
 
     val baseModifier = if (onClick != null) {
@@ -55,85 +52,36 @@ fun ThemedCard(
         modifier
     }
 
-    if (isIsometric) {
-        // Rendu 3D Isométrique avec biseau inférieur physique
-        Box(modifier = baseModifier) {
-            // Bloc d'extrusion 3D inférieur
-            Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .offset(y = theme.borders.extrusionDepth)
-                    .clip(shape)
-                    .background(theme.borders.extrusionColor)
-            )
-
-            // Dalle isométrique supérieure
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = shape,
-                colors = CardDefaults.cardColors(
-                    containerColor = containerColor,
-                    contentColor = contentColor
-                ),
-                border = border,
-                elevation = CardDefaults.cardElevation(defaultElevation = elevation)
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    content = content
+    Card(
+        modifier = baseModifier.fillMaxWidth(),
+        shape = shape,
+        colors = CardDefaults.cardColors(
+            containerColor = containerColor,
+            contentColor = contentColor
+        ),
+        border = border,
+        elevation = CardDefaults.cardElevation(defaultElevation = elevation)
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            // Accent supérieur subtil pour le mode Luxury (filet or champagne délicat)
+            if (isLuxury) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.5.dp)
+                        .background(
+                            Brush.horizontalGradient(
+                                colors = listOf(
+                                    Color.Transparent,
+                                    KasaTheme.colors.primary.copy(alpha = 0.65f),
+                                    Color.Transparent
+                                )
+                            )
+                        )
                 )
             }
-        }
-    } else {
-        Card(
-            modifier = baseModifier.fillMaxWidth(),
-            shape = shape,
-            colors = CardDefaults.cardColors(
-                containerColor = containerColor,
-                contentColor = contentColor
-            ),
-            border = border,
-            elevation = CardDefaults.cardElevation(defaultElevation = elevation)
-        ) {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                // Accent supérieur subtil pour le mode Futuriste (HUD laser line)
-                if (isFuturistic) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(2.dp)
-                            .background(
-                                Brush.horizontalGradient(
-                                    colors = listOf(
-                                        Color.Transparent,
-                                        KasaTheme.colors.primary,
-                                        KasaTheme.colors.secondary,
-                                        Color.Transparent
-                                    )
-                                )
-                            )
-                    )
-                }
-                // Accent supérieur subtil pour le mode Luxury (filet doré)
-                if (isLuxury) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(
-                                Brush.horizontalGradient(
-                                    colors = listOf(
-                                        Color.Transparent,
-                                        KasaTheme.colors.primary.copy(alpha = 0.6f),
-                                        Color.Transparent
-                                    )
-                                )
-                            )
-                    )
-                }
 
-                content()
-            }
+            content()
         }
     }
 }
@@ -208,9 +156,7 @@ fun ThemedButton(
 
     Button(
         onClick = onClick,
-        modifier = modifier
-            .height(48.dp)
-            .offset(y = if (theme.borders.is3dExtruded && isPressed) 2.dp else 0.dp),
+        modifier = modifier.height(48.dp),
         enabled = enabled,
         shape = shape,
         colors = ButtonDefaults.buttonColors(
@@ -219,8 +165,7 @@ fun ThemedButton(
         ),
         border = border,
         elevation = ButtonDefaults.buttonElevation(
-            defaultElevation = KasaTheme.shadows.buttonElevation,
-            pressedElevation = if (theme.borders.is3dExtruded) 1.dp else KasaTheme.shadows.buttonElevation
+            defaultElevation = KasaTheme.shadows.buttonElevation
         ),
         interactionSource = interactionSource,
         contentPadding = PaddingValues(horizontal = 18.dp, vertical = 10.dp)
@@ -428,10 +373,8 @@ fun ThemedPreviewCard(
 
                 // Badge icône launcher associée
                 val launcherEmoji = when (def.icons.appIconKey) {
-                    "sunset" -> "🌅 Rose"
                     "emerald" -> "🌿 Zen"
-                    "default" -> "🏡 3D"
-                    "dark" -> "🌙 Cyber"
+                    "sunset" -> "🌸 Rose"
                     "gold" -> "👑 Or"
                     else -> "📱 App"
                 }
@@ -485,9 +428,7 @@ private val LuxuryGoldBorder = BorderStroke(
 /**
  * Conteneur d'icône (ou d'émoji) qui adopte fidèlement le langage visuel du thème actif.
  * - KAWAII : Bulle marshmallow moelleuse, fond crème/pastel, ombre douce.
- * - JAPANESE : Sceau Hanko/Kamon d'estampe zen, cadre géométrique fin, bordure calligraphique.
- * - ISOMETRIC : Dalle 3D en relief physique avec socle d'extrusion inférieur.
- * - FUTURISTIC : Cockpit cybernétique biseauté, halo néon luminescent, accents HUD.
+ * - JAPANESE : Sceau Hanko/Kamon d'estampe zen, cadre épuré, bordure calligraphique.
  * - LUXURY : Médaillon haute joaillerie avec cerclage d'or champagne brossé.
  */
 @Composable
@@ -498,8 +439,6 @@ fun ThemedIconBadge(
     content: @Composable BoxScope.() -> Unit
 ) {
     val icons = KasaTheme.icons
-    val colors = KasaTheme.colors
-    val isDark = KasaTheme.isDark
 
     when (icons.styleType) {
         IconStyleType.KAWAII_BUBBLE -> {
@@ -509,7 +448,7 @@ fun ThemedIconBadge(
                 shape = CircleShape,
                 color = if (isSelected) icons.selectedContainerBackground else icons.containerBackground,
                 border = if (isSelected) icons.selectedBorder else icons.containerBorder,
-                shadowElevation = if (isSelected) 4.dp else 1.dp
+                shadowElevation = if (isSelected) 3.dp else 1.dp
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -523,70 +462,10 @@ fun ThemedIconBadge(
             // Hanko / Kamon Japanese Stamp
             Surface(
                 modifier = modifier.size(size),
-                shape = RoundedCornerShape(4.dp),
+                shape = RoundedCornerShape(8.dp),
                 color = if (isSelected) icons.selectedContainerBackground else icons.containerBackground,
                 border = if (isSelected) icons.selectedBorder else icons.containerBorder,
                 shadowElevation = 0.dp
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center,
-                    content = content
-                )
-            }
-        }
-
-        IconStyleType.ISOMETRIC_3D -> {
-            // Isometric 3D Extruded Tile
-            val depth = if (isSelected) 3.dp else 2.dp
-            val extrusionColor = if (isDark) Color(0xFF0F172A) else Color(0xFF94A3B8)
-
-            Box(modifier = modifier.size(size + depth)) {
-                // Socle d'extrusion 3D inférieur
-                Box(
-                    modifier = Modifier
-                        .size(size)
-                        .offset(y = depth)
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(extrusionColor)
-                )
-
-                // Dalle isométrique supérieure
-                Surface(
-                    modifier = Modifier.size(size),
-                    shape = RoundedCornerShape(8.dp),
-                    color = if (isSelected) icons.selectedContainerBackground else icons.containerBackground,
-                    border = if (isSelected) icons.selectedBorder else icons.containerBorder,
-                    shadowElevation = 2.dp
-                ) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center,
-                        content = content
-                    )
-                }
-            }
-        }
-
-        IconStyleType.FUTURISTIC_HUD -> {
-            // Futuristic Cybernetic HUD Frame with Angled Cut Corners
-            val hudShape = CutCornerShape(7.dp)
-            val glowBorder = if (isSelected) {
-                BorderStroke(1.5.dp, colors.primary)
-            } else {
-                BorderStroke(1.dp, colors.border)
-            }
-
-            Surface(
-                modifier = modifier
-                    .size(size)
-                    .then(
-                        if (isSelected) Modifier.shadow(6.dp, hudShape, ambientColor = colors.primary, spotColor = colors.primary)
-                        else Modifier
-                    ),
-                shape = hudShape,
-                color = if (isSelected) icons.selectedContainerBackground else icons.containerBackground,
-                border = glowBorder
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize(),

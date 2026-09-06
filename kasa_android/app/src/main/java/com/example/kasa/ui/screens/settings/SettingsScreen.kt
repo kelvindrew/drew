@@ -172,16 +172,23 @@ fun SettingsScreen(
                         Text(currentAestheticTheme.previewEmoji, fontSize = 22.sp)
                     }
                     Spacer(modifier = Modifier.width(14.dp))
-                    Column {
+                    Column(modifier = Modifier.padding(end = 8.dp)) {
                         Text(
                             text = currentAestheticTheme.title,
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
-                            text = "Cliquez pour passer à ${nextTheme.previewEmoji} ${nextTheme.title}",
+                            text = currentAestheticTheme.subtitle,
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            text = "Suivant : ${nextTheme.previewEmoji} ${nextTheme.title}",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.SemiBold
                         )
                     }
                 }

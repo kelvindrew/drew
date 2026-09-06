@@ -55,14 +55,14 @@ object LuxuryTheme {
     private val DarkBorderActive = Color(0xFFD4AF37)
 
     private val shapes = ThemeShapes(
-        small = RoundedCornerShape(2.dp),
-        medium = RoundedCornerShape(4.dp),
-        large = RoundedCornerShape(6.dp),
-        cardShape = RoundedCornerShape(4.dp),
-        buttonShape = RoundedCornerShape(3.dp),
-        badgeShape = RoundedCornerShape(2.dp),
-        inputShape = RoundedCornerShape(3.dp),
-        bottomNavShape = RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp)
+        small = RoundedCornerShape(6.dp),
+        medium = RoundedCornerShape(10.dp),
+        large = RoundedCornerShape(18.dp),
+        cardShape = RoundedCornerShape(14.dp),
+        buttonShape = RoundedCornerShape(12.dp),
+        badgeShape = RoundedCornerShape(6.dp),
+        inputShape = RoundedCornerShape(12.dp),
+        bottomNavShape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)
     )
 
     private val typography = ThemeTypographyTokens(
@@ -193,10 +193,10 @@ object LuxuryTheme {
         val borders = ThemeBorders(
             hairline = 0.5.dp,
             regular = 0.75.dp,
-            thick = 1.dp,
-            cardBorder = BorderStroke(0.5.dp, colors.border),
-            cardBorderActive = BorderStroke(0.75.dp, colors.borderActive),
-            buttonBorder = BorderStroke(0.75.dp, colors.primary),
+            thick = 1.2.dp,
+            cardBorder = BorderStroke(0.75.dp, colors.border),
+            cardBorderActive = BorderStroke(1.dp, colors.borderActive),
+            buttonBorder = BorderStroke(1.dp, colors.primary),
             is3dExtruded = false
         )
 
@@ -204,14 +204,14 @@ object LuxuryTheme {
             cardElevation = 2.dp,
             buttonElevation = 1.dp,
             floatingElevation = 4.dp,
-            shadowColor = if (isDark) Color(0x40000000) else Color(0x0F000000)
+            shadowColor = if (isDark) Color(0x40000000) else Color(0x0C000000)
         )
 
         val iconTokens = ThemeIconTokens(
             styleType = IconStyleType.LUXURY_BEZEL,
             containerShape = CircleShape,
             containerBorder = BorderStroke(0.75.dp, colors.border),
-            selectedBorder = BorderStroke(1.dp, colors.primary),
+            selectedBorder = BorderStroke(1.2.dp, colors.primary),
             containerBackground = if (isDark) colors.surfaceSecondary else colors.surfaceVariant.copy(alpha = 0.5f),
             selectedContainerBackground = if (isDark) colors.primaryContainer else colors.primary.copy(alpha = 0.15f),
             iconTint = colors.onSurfaceVariant,
@@ -229,10 +229,10 @@ object LuxuryTheme {
             motion = motion,
             decorations = ThemeDecorations(
                 emoji = "💎",
-                name = "Luxury Design",
+                name = "Élégant & Moderne",
                 subtitle = "Quiet Luxury, Or Champagne & Onyx",
-                tagText = "Haute Couture",
-                visualSignature = "Hairline Borders • Champagne Gold • Editorial Serif"
+                tagText = "Prestige & Épure",
+                visualSignature = "Filets Hairline • Or Champagne • Allure Contemporaine"
             ),
             icons = iconTokens
         )

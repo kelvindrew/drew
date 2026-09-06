@@ -55,14 +55,14 @@ object KawaiiTheme {
     private val DarkBorderActive = Color(0xFFFF85AE)
 
     private val shapes = ThemeShapes(
-        small = RoundedCornerShape(14.dp),
-        medium = RoundedCornerShape(20.dp),
-        large = RoundedCornerShape(28.dp),
-        cardShape = RoundedCornerShape(26.dp),
-        buttonShape = RoundedCornerShape(24.dp),
+        small = RoundedCornerShape(12.dp),
+        medium = RoundedCornerShape(16.dp),
+        large = RoundedCornerShape(24.dp),
+        cardShape = RoundedCornerShape(20.dp),
+        buttonShape = RoundedCornerShape(18.dp),
         badgeShape = CircleShape,
-        inputShape = RoundedCornerShape(20.dp),
-        bottomNavShape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
+        inputShape = RoundedCornerShape(16.dp),
+        bottomNavShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
     )
 
     private val typography = ThemeTypographyTokens(
@@ -184,19 +184,19 @@ object KawaiiTheme {
 
         val borders = ThemeBorders(
             hairline = 1.dp,
-            regular = 1.5.dp,
-            thick = 2.5.dp,
-            cardBorder = BorderStroke(1.5.dp, colors.border),
-            cardBorderActive = BorderStroke(2.dp, colors.borderActive),
+            regular = 1.2.dp,
+            thick = 2.dp,
+            cardBorder = BorderStroke(1.dp, colors.border),
+            cardBorderActive = BorderStroke(1.5.dp, colors.borderActive),
             buttonBorder = null,
             is3dExtruded = false
         )
 
         val shadows = ThemeShadows(
-            cardElevation = 5.dp,
-            buttonElevation = 4.dp,
-            floatingElevation = 8.dp,
-            shadowColor = if (isDark) Color(0x33000000) else Color(0x1AFFA6C2)
+            cardElevation = 3.dp,
+            buttonElevation = 2.dp,
+            floatingElevation = 6.dp,
+            shadowColor = if (isDark) Color(0x33000000) else Color(0x14FF8BAE)
         )
 
         val iconTokens = ThemeIconTokens(
@@ -221,10 +221,10 @@ object KawaiiTheme {
             motion = motion,
             decorations = ThemeDecorations(
                 emoji = "🌸",
-                name = "Kawaii Design",
+                name = "Doux & Convivial",
                 subtitle = "Pastel doux & Formes marshmallow",
-                tagText = "Cute & Playful",
-                visualSignature = "Pill Shapes • Soft Shadows • Bouncy Spring"
+                tagText = "Chaleureux & Doux",
+                visualSignature = "Formes Marshmallow • Tons Pastel • Rebonds Doux"
             ),
             icons = iconTokens
         )

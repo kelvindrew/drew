@@ -6,8 +6,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.kasa.data.repository.KasaStorage
 import com.example.kasa.util.AppIconManager
-import com.example.kasa.theme.tokens.FuturisticTheme
-import com.example.kasa.theme.tokens.IsometricTheme
 import com.example.kasa.theme.tokens.JapaneseTheme
 import com.example.kasa.theme.tokens.KawaiiTheme
 import com.example.kasa.theme.tokens.KasaThemeDefinition
@@ -36,50 +34,36 @@ enum class ChatWallpaper(val title: String, val subtitle: String, val icon: Stri
 }
 
 /**
- * Les 5 thèmes officiels du Design System KASA.
- * Chaque thème propose une identité visuelle complète (tokens, formes, typographie, ombres, bordures et motion).
+ * Les 3 thèmes d'excellence du Design System KASA.
+ * Sélectionnés pour leur cohérence graphique, leur lisibilité et leur disposition optimale.
  */
 enum class AppAestheticTheme(
     val title: String,
     val subtitle: String,
     val previewEmoji: String
 ) {
+    JAPANESE(
+        title = "Zen & Minimaliste",
+        subtitle = "Style Japonais, Washi & Encre Sumi",
+        previewEmoji = "🎌"
+    ),
+
     KAWAII(
-        title = "Kawaii Design",
+        title = "Doux & Convivial",
         subtitle = "Pastel doux & Formes marshmallow",
         previewEmoji = "🌸"
     ),
 
-    JAPANESE(
-        title = "Japanese Style",
-        subtitle = "Minimalisme Zen, Washi & Ma",
-        previewEmoji = "🎌"
-    ),
-
-    ISOMETRIC(
-        title = "Isometric Design",
-        subtitle = "Profondeur 3D, Dalles & Reliefs",
-        previewEmoji = "🔷"
-    ),
-
-    FUTURISTIC(
-        title = "Futuristic UI",
-        subtitle = "HUD 2026, Spatial & Verre Dépoli",
-        previewEmoji = "🚀"
-    ),
-
     LUXURY(
-        title = "Luxury Design",
+        title = "Élégant & Moderne",
         subtitle = "Quiet Luxury, Or Champagne & Onyx",
         previewEmoji = "💎"
     );
 
     fun getDefinition(isDark: Boolean): KasaThemeDefinition {
         return when (this) {
-            KAWAII -> KawaiiTheme.create(isDark)
             JAPANESE -> JapaneseTheme.create(isDark)
-            ISOMETRIC -> IsometricTheme.create(isDark)
-            FUTURISTIC -> FuturisticTheme.create(isDark)
+            KAWAII -> KawaiiTheme.create(isDark)
             LUXURY -> LuxuryTheme.create(isDark)
         }
     }
@@ -116,7 +100,7 @@ object ThemeManager {
     private val _themeMode = MutableStateFlow(AppThemeMode.SYSTEM)
     val themeMode: StateFlow<AppThemeMode> = _themeMode.asStateFlow()
 
-    private val _aestheticTheme = MutableStateFlow(AppAestheticTheme.KAWAII)
+    private val _aestheticTheme = MutableStateFlow(AppAestheticTheme.JAPANESE)
     val aestheticTheme: StateFlow<AppAestheticTheme> = _aestheticTheme.asStateFlow()
 
     private val _chatWallpaper = MutableStateFlow(ChatWallpaper.MINIMAL)
@@ -139,20 +123,17 @@ object ThemeManager {
         try {
             val savedTheme = s.getAestheticTheme()
             _aestheticTheme.value = when (savedTheme) {
-                "KAWAII" -> AppAestheticTheme.KAWAII
                 "JAPANESE" -> AppAestheticTheme.JAPANESE
-                "ISOMETRIC" -> AppAestheticTheme.ISOMETRIC
-                "FUTURISTIC" -> AppAestheticTheme.FUTURISTIC
+                "KAWAII" -> AppAestheticTheme.KAWAII
                 "LUXURY" -> AppAestheticTheme.LUXURY
                 // Mappings de migration transparente :
+                "EMERALD", "BOREAL_GOLD", "ISOMETRIC" -> AppAestheticTheme.JAPANESE
                 "SAKURA" -> AppAestheticTheme.KAWAII
-                "EMERALD", "BOREAL_GOLD" -> AppAestheticTheme.JAPANESE
-                "AMOLED_NEON", "DEEP_OCEAN" -> AppAestheticTheme.FUTURISTIC
-                "CAFE_LATTE", "SUNSET" -> AppAestheticTheme.LUXURY
-                else -> AppAestheticTheme.KAWAII
+                "AMOLED_NEON", "DEEP_OCEAN", "FUTURISTIC", "CAFE_LATTE", "SUNSET" -> AppAestheticTheme.LUXURY
+                else -> AppAestheticTheme.JAPANESE
             }
         } catch (e: Exception) {
-            _aestheticTheme.value = AppAestheticTheme.KAWAII
+            _aestheticTheme.value = AppAestheticTheme.JAPANESE
         }
 
         try {

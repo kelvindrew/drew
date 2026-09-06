@@ -54,14 +54,14 @@ object JapaneseTheme {
     private val DarkBorderActive = Color(0xFFE04F40)
 
     private val shapes = ThemeShapes(
-        small = RoundedCornerShape(3.dp),
-        medium = RoundedCornerShape(5.dp),
-        large = RoundedCornerShape(8.dp),
-        cardShape = RoundedCornerShape(6.dp),
-        buttonShape = RoundedCornerShape(4.dp),
-        badgeShape = RoundedCornerShape(2.dp),
-        inputShape = RoundedCornerShape(4.dp),
-        bottomNavShape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)
+        small = RoundedCornerShape(6.dp),
+        medium = RoundedCornerShape(10.dp),
+        large = RoundedCornerShape(16.dp),
+        cardShape = RoundedCornerShape(12.dp),
+        buttonShape = RoundedCornerShape(10.dp),
+        badgeShape = RoundedCornerShape(6.dp),
+        inputShape = RoundedCornerShape(10.dp),
+        bottomNavShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
     )
 
     private val typography = ThemeTypographyTokens(
@@ -197,19 +197,19 @@ object JapaneseTheme {
         )
 
         val shadows = ThemeShadows(
-            cardElevation = 0.dp, // Zen simplicity
-            buttonElevation = 0.dp,
+            cardElevation = 1.dp, // Zen subtle elevation
+            buttonElevation = 1.dp,
             floatingElevation = 3.dp,
-            shadowColor = if (isDark) Color(0x33000000) else Color(0x0A000000)
+            shadowColor = if (isDark) Color(0x33000000) else Color(0x0F000000)
         )
 
         val iconTokens = ThemeIconTokens(
             styleType = IconStyleType.JAPANESE_STAMP,
-            containerShape = RoundedCornerShape(4.dp),
+            containerShape = RoundedCornerShape(8.dp),
             containerBorder = BorderStroke(0.75.dp, colors.border),
-            selectedBorder = BorderStroke(1.2.dp, colors.primary),
+            selectedBorder = BorderStroke(1.5.dp, colors.primary),
             containerBackground = if (isDark) colors.surfaceSecondary else colors.surfaceVariant.copy(alpha = 0.5f),
-            selectedContainerBackground = if (isDark) colors.primaryContainer else colors.primaryContainer.copy(alpha = 0.7f),
+            selectedContainerBackground = if (isDark) colors.primaryContainer else colors.primaryContainer.copy(alpha = 0.8f),
             iconTint = colors.onSurfaceVariant,
             selectedIconTint = colors.primary,
             appIconKey = "emerald"
@@ -225,10 +225,10 @@ object JapaneseTheme {
             motion = motion,
             decorations = ThemeDecorations(
                 emoji = "🎌",
-                name = "Japanese Style",
-                subtitle = "Minimalisme Zen, Washi & Ma",
-                tagText = "Minimal & Balanced",
-                visualSignature = "Ma Space • Sumi Ink Borders • Zen Calm"
+                name = "Zen & Minimaliste",
+                subtitle = "Style Japonais, Washi & Encre Sumi",
+                tagText = "Minimal & Épuré",
+                visualSignature = "Espace Ma • Bordures Encre Sumi • Sérénité Zen"
             ),
             icons = iconTokens
         )

@@ -10,6 +10,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.kasa.theme.tokens.JapaneseTheme
 import com.example.kasa.theme.tokens.KawaiiTheme
 import com.example.kasa.theme.tokens.KasaThemeDefinition
 import com.example.kasa.theme.tokens.ThemeBorders
@@ -35,7 +36,7 @@ object KasaDimens {
 }
 
 val LocalKasaTheme = staticCompositionLocalOf<KasaThemeDefinition> {
-    KawaiiTheme.create(false)
+    JapaneseTheme.create(false)
 }
 
 /**
@@ -155,7 +156,7 @@ fun createMaterialShapes(themeShapes: ThemeShapes): Shapes {
 @Composable
 fun KASATheme(
     themeMode: AppThemeMode = AppThemeMode.SYSTEM,
-    aestheticTheme: AppAestheticTheme = AppAestheticTheme.KAWAII,
+    aestheticTheme: AppAestheticTheme = AppAestheticTheme.JAPANESE,
     cornerStyle: UiCornerStyle = UiCornerStyle.ROUNDED,
     content: @Composable () -> Unit
 ) {

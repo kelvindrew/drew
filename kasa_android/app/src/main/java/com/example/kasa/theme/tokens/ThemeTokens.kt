@@ -140,8 +140,6 @@ data class ThemeDecorations(
 enum class IconStyleType {
     KAWAII_BUBBLE,
     JAPANESE_STAMP,
-    ISOMETRIC_3D,
-    FUTURISTIC_HUD,
     LUXURY_BEZEL
 }
 
